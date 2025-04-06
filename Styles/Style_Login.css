@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@media (max-width: 768px) {
+  .background {
+    display: none;
+  }
+
+  .login-box {
+    width: 100%;
+    height: 100vh;
+    margin-left: 0; /* remove o alinhamento à direita */
+  }
+}
+:root {
+  --Background_color: #F7F4F1;
+  --hand_over_color: #B3CBBA;
+  --select_color: #1C7241;
+  --standard_font: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--standard_font);
+}
+
+body {
+  display: flex;
+  height: 100vh;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
+                    url('../Images/Natureza.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.logoEscrita{
+  width: 20%;
+  
+}
+
+
+.login-box {
+  width: 40%;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  height: 100vh;
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
+  margin-left: auto;
+  border-radius: 20px;
+  
+}
+
+
+.login-box h2 {
+  margin-bottom: 20px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.login-box button {
+  padding: 10px 20px;
+  width: 100%;
+  background-color: var(--select_color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+.form-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centraliza tudo horizontalmente */
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  align-self: flex-start;
+  margin-left: 10%;
+}
+
+.form-container input,
+.form-container button {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.form-container button {
+  background-color: var(--select_color);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.login-links {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+
+.login-links a {
+  text-decoration: none;
+  color: var(--select_color);
+}
+
+.login-links a:hover {
+  text-decoration: underline;
+}
+.background {
+  width: 60%;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start; /* Alinha no topo */
+  padding: 40px 0px 0px 40px; /* Espaço do topo */
+}
+
+button:hover{
+  background-color: var(--hand_over_color);
+}

@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 :root {
   --Background_color: #F7F4F1;
   --hand_over_color: #B3CBBA;
   --select_color: #1C7241;
+  --standard_font: 'Inter', sans-serif
 }
 
+html{
+  font-family: var(--standard_font);
+}
 body {
   margin: 0;
   padding: 0;
@@ -109,4 +114,14 @@ header {
 
 .sidebar ul li a:hover {
   background-color: var(--hand_over_color);
+  font-weight: bold;
+}
+
+
+
+
+
+.topicos{
+  margin-left: 3%;
+  font-weight: bold;
 }
