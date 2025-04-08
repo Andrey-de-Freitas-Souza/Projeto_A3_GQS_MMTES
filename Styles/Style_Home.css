@@ -71,6 +71,12 @@ header {
   display: block;
 }
 
+.help:hover,
+.Notification:hover,
+.Profile:hover {
+  cursor: pointer;
+}
+
 .Profile {
   border-radius: 50%;
 }
@@ -100,7 +106,10 @@ header {
 
 .sidebar ul {
   list-style: none;
-  padding: 0;
+  width: 100%;
+  padding: 0 10px; /* dá espaço nas laterais */
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .sidebar ul li a {
@@ -108,8 +117,8 @@ header {
   text-decoration: none;
   display: block;
   transition: background 0.2s;
-  padding: 20px;
-  border-radius: 4%;
+  padding: 15px 10px; /* 15px vertical, 10px horizontal */
+  border-radius: 8px;
 }
 
 .sidebar ul li a:hover {
@@ -117,11 +126,62 @@ header {
   font-weight: bold;
 }
 
-
-
-
-
 .topicos{
   margin-left: 3%;
   font-weight: bold;
+}
+
+aside hr{
+  width: 90%;
+  height: 2px; /* Define a altura */
+  background-color: rgba(0, 0, 0, 0.116);
+  border: none;
+}
+
+main h1{
+  padding: 0.5%;
+  margin-left: 1%;
+}
+
+main hr{
+  width: 97%;
+  height: 2px; /* Define a altura */
+  background-color: rgba(0, 0, 0, 0.116);
+  border: none;
+}
+
+.Adicionar {
+  width: 95%;
+  border: solid rgba(0, 0, 0, 0.116) 2px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1% auto 0 auto;
+  padding: 10px 15px;
+}
+
+.Adicionar p {
+  margin: 0; /* remove margens padrão */
+}
+
+.Adicionar p:first-child {
+  margin-left: 0.1%; /* só o "Adicionar" recebe */
+}
+
+.plus {
+  font-weight: bold;
+  color:rgba(0, 0, 0, 0.212);
+  font-size: 22px; /* ajusta visualmente */
+}
+.Adicionar:hover {
+  cursor: pointer;
+}
+
+.centralizar-frame {
+  display: flex;
+  justify-content: center; /* centraliza horizontalmente */
+
+  height: 100vh;           /* ocupa 100% da altura da tela */
+  width: 100vw;            /* ocupa 100% da largura da tela */
 }
