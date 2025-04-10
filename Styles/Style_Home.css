@@ -159,6 +159,8 @@ main hr{
   align-items: center;
   margin: 1% auto 0 auto;
   padding: 10px 15px;
+  box-sizing: border-box; /* <-- Adicionado */
+  overflow-x: hidden; /* <-- Adicional para segurança */
 }
 
 .Adicionar p {
