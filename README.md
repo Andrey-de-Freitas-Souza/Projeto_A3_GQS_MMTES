@@ -51,7 +51,7 @@
 2. Execute o servidor Flask:
 
    ```bash
-   python run.py
+   python app.py
    ```
 
 3. Acesse a aplicação no navegador:
