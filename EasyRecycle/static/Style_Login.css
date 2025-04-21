@@ -59,7 +59,7 @@ body {
   display: flex;
   height: 100vh;
   background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
-                    url('../Images/Natureza.jpg');
+            url('Images/Natureza.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }

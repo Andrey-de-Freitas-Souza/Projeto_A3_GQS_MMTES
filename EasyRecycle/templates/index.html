@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Styles/Style_Login.css">
-    <link rel="icon" href="Images/Icon.png" type="image/png"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style_Login.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='Images/Icon.png') }}" type="png"> 
     <title>Login</title>
    
 </head>
 <body>
     <div class="background">
-        <img class="logoEscrita" src="Images/Logo_escrita.svg" alt="">
+      <img class="logoEscrita" src="{{ url_for('static', filename='Images/Logo_escrita.svg') }}" alt="Logo">
     </div>    
     <div class="login-box">
         <div class="form-container">
           <h2>Login</h2>
           <input type="text" placeholder="Usuário">
           <input type="password" placeholder="Senha">
-          <button onclick="location.href='Pages/home.html'">Entrar</button>
+          <button onclick="location.href='/home'">Entrar</button>
           <div class="login-links">
             <a href="#">Esqueceu sua senha?</a>
             <a href="#">Cadastre-se</a>
