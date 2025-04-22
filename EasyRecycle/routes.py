@@ -9,18 +9,18 @@ def index():
 
 @routes.route('/home')
 def home():
-    # db = get_db_connection()
-    # cursor = db.cursor(dictionary=True)
-    # cursor.execute("SELECT * FROM teste")
-    # dados = cursor.fetchall()
+     db = get_db_connection()
+     cursor = db.cursor(dictionary=True)
+     cursor.execute("SELECT * FROM teste")
+     dados = cursor.fetchall()
 
-    # print("=== Dados vindos do banco ===")
-    # for linha in dados:
-    #     print(linha)
+     print("=== Dados vindos do banco ===")
+     for linha in dados:
+         print(linha)
 
-    # cursor.close()
-    # db.close()
-    return render_template("home.html")
+     cursor.close()
+     db.close()
+     return render_template("home.html",dados=dados)
 
 @routes.route('/Points')
 def Points():

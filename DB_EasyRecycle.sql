@@ -17,8 +17,10 @@ CREATE TABLE Users (
 );
 
 
+create table teste(
+nome varchar(200),
+data_nascimento date);
 
-
-insert into teste (Nome, Dt_nascimento) values ("Andrey", "2005-06-06");
-insert into teste (Nome, Dt_nascimento) values ("Bete", "1972-04-20");
+insert into teste (Nome, data_nascimento) values ("Andrey", "2005-06-06");
+insert into teste (Nome, data_nascimento) values ("Bete", "1972-04-20");
 select * from teste;
