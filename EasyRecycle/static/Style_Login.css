@@ -1,171 +1,128 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
-@media (max-width: 768px) {
-  body {
-    background-image: none !important;
-    background-color: #ffffff;
-    flex-direction: column;
-  }
-
-  .background,
-  .logoEscrita {
-    display: none !important; /* remove a logo e o background */
-  }
-
-  .login-box {
-    width: 100% !important;
-    height: 100vh !important;
-    margin-left: 0;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 30px 20px;
-    justify-content: center;
-  }
-
-  .login-box h2 {
-    text-align: center;
-  }
-
-  .login-box input,
-  .login-box button {
-    max-width: 100%;
-  }
-
-  .login-links {
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-  }
-}
-:root {
-  --Background_color: #F7F4F1;
-  --hand_over_color: #B3CBBA;
-  --select_color: #1C7241;
-  --standard_font: 'Inter', sans-serif;
-}
-
+/* Reset básico */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-html, body {
-  height: 100%;
-  font-family: var(--standard_font);
-}
-
+/* Estilo do body */
 body {
-  display: flex;
+  margin: 0;
+  padding: 0;
   height: 100vh;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),
-            url('Images/Natureza.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-.logoEscrita{
-  width: 20%;
-  
-}
-
-
-.login-box {
-  width: 40%;
-  background-color: white;
+  background: url('../static/Images/Natureza.jpg') no-repeat center center fixed;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 40px;
-  height: 100vh;
-  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.1);
-  margin-left: auto;
-  border-radius: 20px;
-  
+  font-family: Arial, sans-serif;
 }
 
-
-.login-box h2 {
-  margin-bottom: 20px;
-}
-
-.login-box input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  max-width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.login-box button {
-  padding: 10px 20px;
-  width: 100%;
-  background-color: var(--select_color);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  max-width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-  
-}
-.form-container {
-  width: 100%;
+/* Estilo da caixa que envolve os formulários */
+#form-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* centraliza tudo horizontalmente */
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  height: 100vh;
+  background-color: rgba(255, 255, 255); /* Caixa branca com leve transparência */
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  border-radius: 10px 0px 0px 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.5s ease;
+  overflow: hidden;
 }
 
-.form-container h2 {
+/* Estilo para os dois formulários internos */
+#login-form,
+#cadastro-form {
+  width: 80%;
+  display: none; /* Ambos escondidos inicialmente */
+  flex-direction: column;
+  align-items: flex-start; /* Título e campos alinhados à esquerda */
+  gap: 10px;
+}
+
+/* Formulário ativo */
+#login-form.active,
+#cadastro-form.active {
+  display: flex;
+}
+
+/* Título do formulário */
+#form-container h2 {
+  align-self: flex-start; /* Alinha o título à esquerda */
   margin-bottom: 20px;
-  font-size: 24px;
-  align-self: flex-start;
-  margin-left: 10%;
 }
 
-.form-container input,
-.form-container button {
-  width: 80%;
+/* Inputs */
+#form-container input {
+  width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 4px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
+  border-radius: 5px;
 }
-
-.form-container button {
-  background-color: var(--select_color);
+select{
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+/* Botões */
+#form-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
   color: white;
+  font-weight: bold;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.login-links {
-  width: 80%;
+#form-container button:hover {
+  background-color: #0056b3;
+}
+
+/* Links (Cadastre-se e Esqueceu a senha?) */
+.links {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  width: 100%;
+  margin-top: 10px;
 }
 
-
-.login-links a {
-  text-decoration: none;
-  color: var(--select_color);
+.links span {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.3s;
+}
+.links p {
+  font-size: 14px;
 }
 
-.login-links a:hover {
-  text-decoration: underline;
+.links span:hover {
+  color: #0056b3;
 }
-.background {
-  width: 60%;
-  height: 100vh;
+
+.input-container {
   display: flex;
-  align-items: flex-start; /* Alinha no topo */
-  padding: 40px 0px 0px 40px; /* Espaço do topo */
+  align-items: center;
 }
 
-button:hover{
-  background-color: var(--hand_over_color);
+#ddi {
+  width: 120px; /* Ajuste o tamanho conforme necessário */
+  padding: 5px;
+}
+
+#telefone {
+  flex-grow: 1; /* Faz com que o campo de telefone ocupe o restante do espaço */
+  padding: 5px;
+  margin-left: 10px; /* Espaçamento entre o select e o input */
 }

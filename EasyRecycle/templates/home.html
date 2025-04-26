@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='Style_Home.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='Images/Icon.png') }}" type="png"> 
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <title>Easy Recycle</title>
    
 </head>
@@ -25,11 +27,10 @@
         <!-- Grupo esquerdo: menu + logo -->
         <aside class="sidebar" id="sidebar">
             <nav>
-                <p class="topicos">Minhas reciclagens</p>
+                <p class="topicos">Minha Jornada</p>
             <ul>
-                <li><a href="/home">Hoje</a></li>
-                <li><a href="/home">Últimos 7 dias</a></li>
-                <li><a href="/home">Histórico completo</a></li>
+                <li><a href="/home">Minhas reciclagens</a></li>
+                <li><a href="/home">Conteúdos informativos</a></li>
             </ul>
             <hr>
             <p class="topicos">Vizinhança</p>
@@ -45,7 +46,7 @@
             </nav>
         </aside>
         
-        
+
         <!-- Grupo direito: ícones -->
         <div class="header-icons">
             <svg class ="help"width="40" height="40" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -59,10 +60,56 @@
         </div>
     </header>
     <main>
-        <div class="Adicionar">
+        <div id="btnAdicionar" class="Adicionar">
             <p>Adicionar</p>
             <p class="plus">+</p>
         </div>
+
+    <!-- Overlay + Modal -->
+        <div id="modalOverlay" class="overlay" style="display: none;">
+        <div class="modal">
+            <button id="fecharModal" style="
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: none;
+  border: none;
+  font-size: 60px;  /* Aumentando o tamanho */
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  z-index: 1000;
+  line-height: 0;
+">
+  ⌵
+</button>
+
+            <h2>Cadastro de Reciclagem</h2>
+                <form id="formCadastro">
+                    <label for="data">
+                    <label for="categorySelect">Material:</label>
+                    <div class="select-container"> 
+                    <select id="categorySelect" name="category_id" required>
+                      <option value="">Selecione o item</option>
+                      <!-- Opções serão carregadas aqui via JavaScript -->
+                    </select>
+                    </div>    
+                    <label for="peso">Peso em gramas:</label>
+                    <input type="number" placeholder="Peso (g)" name="peso" required>
+                    <label for="collection_point">Ponto de coleta:</label>
+                    <div class="select-container">    
+                    <select id="collection_point" name="collection_point" required>
+                      <option value="">Selecione o item</option>
+                      <!-- Opções serão carregadas aqui via JavaScript -->
+                    </select>
+                    </div>
+                    <button type="submit">Cadastrar</button>
+                  </form>
+        </div>
+        </div>
+
+        
 
         <h1>Hoje</h1>
         <hr>
@@ -82,6 +129,6 @@
         <p>Nenhum dado encontrado no banco.</p>
     {% endif %} 
     </main>
-    <script src="{{ url_for('static', filename='Scripts/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='Scripts/Script_Home.js') }}"></script>
 </body>
 </html>

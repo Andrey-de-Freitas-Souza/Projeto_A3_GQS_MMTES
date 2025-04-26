@@ -187,3 +187,65 @@ main hr{
   height: 100vh;           /* ocupa 100% da altura da tela */
   width: 100vw;            /* ocupa 100% da largura da tela */
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Fundo escuro */
+  display: flex;
+  align-items: flex-end; /* Modal começa de baixo */
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  width: 100%;        /* Largura total */
+  height: 70%;        /* 70% da altura */
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+  transform: translateY(100%); /* Começa fora da tela */
+  animation: slideUp 0.4s forwards; /* Animação quando aparecer */
+}
+
+@keyframes slideUp {
+  to {
+    transform: translateY(0);
+  }
+}
+
+form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+form input {
+  width: 100%;
+  padding: 10px 0px 10px 0px;
+  margin-bottom: 1%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 0.3%;
+}
+
+
+.select-container {
+  margin-bottom: 1%;  /* Aqui você aplica o espaçamento */
+  margin-top: 0.3%;
+}

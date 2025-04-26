@@ -1,31 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='Style_Login.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='Images/Icon.png') }}" type="png"> 
-    <title>Login</title>
-   
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tela de Login e Cadastro</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='Style_Login.css') }}">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
 <body>
-    <div class="background">
-      <img class="logoEscrita" src="{{ url_for('static', filename='Images/Logo_escrita.svg') }}" alt="Logo">
-    </div>    
-    <div class="login-box">
-        <div class="form-container">
-          <h2>Login</h2>
-          <input type="text" placeholder="Usuário">
-          <input type="password" placeholder="Senha">
-          <button onclick="location.href='/home'">Entrar</button>
-          <div class="login-links">
-            <a href="#">Esqueceu sua senha?</a>
-            <a href="#">Cadastre-se</a>
-          </div>
+  <div class="container">
+    <div id="form-container">
+      <form id="login-form" class="active">
+        <h2>Login</h2>
+        <input type="email" id="email" name="email" placeholder="Email" required>
+        <input type="password" id="password" name="password" placeholder="Senha" required>
+        <button id="btnLogin" type="button">Entrar</button>
+        <div class="links">
+            <span id="cadastre-se">Cadastre-se</span>
+            <span id="esqueceu-senha">Esqueceu a senha?</span>
         </div>
-      </div>
-      
+      </form>
+    
+    
+    
+      <form id="cadastro-form">
+        <h2>Cadastro</h2>
+    
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="name" placeholder="Nome">
+    
+        <label for="data">Data de nascimento:</label>
+        <input type="text" id="data" name="birth_date" placeholder="  /  /    ">
+    
+        <label for="cep">Endereço (CEP):</label>
+        <input type="text" id="cep" name="address" placeholder="00000-000">
+    
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Email">
+    
+        <label for="ddi">Telefone:</label>
+        <div class="input-container">
+            <select id="ddi" name="ddi">
+                <option value="+55">Brasil (+55)</option>
+                <option value="+1">Estados Unidos (+1)</option>
+                <option value="+44">Reino Unido (+44)</option>
+                <option value="+34">Espanha (+34)</option>
+                <option value="+91">Índia (+91)</option>
+                <!-- Adicione outros países conforme necessário -->
+            </select>
+            <input type="tel" id="telefone" name="phone" placeholder="(00)00000-0000">
+        </div>
+    
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="password" placeholder="Senha">
+    
+        <label for="confirmacao_senha">Confirmação de senha:</label>
+        <input type="password" id="confirmacao_senha" name="confirm_password" placeholder="Confirme sua senha">
+    
+        <button id="btnCadastrar" type="submit">Cadastrar</button>
         
-
+        <div class="links">
+            <p>Já tem uma conta? <span id="voltar-login">Voltar para o Login</span></p>
+        </div>
+    </form>
+    </div>    
+  </div>
+  <script src="{{ url_for('static', filename='Scripts/Script_Cadastro.js') }}"></script>
 </body>
 </html>
