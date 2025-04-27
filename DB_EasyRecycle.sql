@@ -22,6 +22,19 @@ CREATE TABLE collection_point (
 	 address VARCHAR(9),
      `number` int
 );
+
+INSERT INTO collection_point (`name`, address, `number`) VALUES
+('Ponto de Coleta Centro', '01001-000', 123),
+('Ponto de Coleta Zona Sul', '04567-890', 456),
+('Ponto de Coleta Zona Norte', '02222-333', 789),
+('Ponto de Coleta Zona Leste', '03456-789', 101),
+('Ponto de Coleta Zona Oeste', '05001-200', 202),
+('Ponto de Coleta Bairro Verde', '06070-100', 303),
+('Ponto de Coleta Jardim das Flores', '07234-567', 404),
+('Ponto de Coleta Vila Nova', '08012-345', 505),
+('Ponto de Coleta Estação Central', '01111-222', 606),
+('Ponto de Coleta Parque das Árvores', '09090-123', 707);
+
 INSERT INTO collection_point (`name`, address, `number`) VALUES
 ('Casa', '09668-010', 66);
 
@@ -52,12 +65,14 @@ CREATE TABLE recycle (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id int,
     FOREIGN KEY (user_id) REFERENCES users(id),
+    category_id int,
+    FOREIGN KEY (category_id) REFERENCES category_item(id),
     weight_item float,
     point_id int,
     FOREIGN KEY (point_id) REFERENCES collection_point(id),
-    date_recycle DATE
+    date_recycle DATETIME
 );
-     
+
 select * from Users;
 select * from collection_point;
 select * from category_item;
