@@ -45,16 +45,16 @@ CREATE TABLE category_item (
     score_by_kilo int
 );
 INSERT INTO category_item (`name`, `description`, score_by_kilo) VALUES
-('Papel', 'A reciclagem de papel é um processo que transforma os papéis usados em novos produtos. Ela reduz a necessidade de desmatamento, economiza energia e água, além de diminuir a quantidade de resíduos sólidos nos aterros sanitários.', 2),
-('Plástico', 'A reciclagem de plástico envolve a coleta, limpeza e transformação de plásticos em novos produtos. Isso ajuda a reduzir a poluição e o consumo de recursos naturais, além de diminuir o impacto ambiental causado pelo descarte inadequado de plásticos.', 8),
-('Vidro', 'Vidro pode ser reciclado indefinidamente sem perder qualidade, o que faz sua reciclagem ser uma prática muito eficiente. O processo de reciclagem de vidro economiza energia e recursos, além de evitar o acúmulo de vidro nos aterros sanitários.', 3),
-('Metais', 'A reciclagem de metais, como alumínio e aço, é altamente eficiente, pois os metais podem ser reutilizados infinitamente sem perder suas propriedades. Esse processo economiza energia e recursos naturais, além de reduzir a emissão de poluentes.', 4),
-('Eletrônicos (Eletroeletrônicos)', 'A reciclagem de eletroeletrônicos envolve a extração de materiais valiosos, como metais preciosos, e o descarte adequado de componentes tóxicos. Isso evita a contaminação ambiental e promove a reutilização de recursos.', 10),
-('Orgânicos', 'A reciclagem orgânica, geralmente por meio da compostagem, transforma resíduos de alimentos e outros materiais biodegradáveis em adubo, contribuindo para a redução do volume de resíduos e para a melhoria da qualidade do solo.', 5),
-('Têxteis', 'A reciclagem de têxteis envolve o reaproveitamento de materiais têxteis, que podem ser transformados em novos produtos ou reciclados para a produção de fibras. Isso reduz o desperdício e ajuda a diminuir a demanda por novos recursos.', 6),
-('Madeira', 'A reciclagem de madeira é um processo que envolve o reaproveitamento de madeira usada para a fabricação de novos produtos ou como fonte de energia. Isso ajuda a reduzir o desperdício e a preservação de florestas, além de diminuir a emissão de gases poluentes.', 5),
-('Baterias e Pilhas', 'A reciclagem de baterias e pilhas é crucial para evitar a liberação de substâncias tóxicas no meio ambiente. Através desse processo, materiais valiosos, como metais, podem ser recuperados e reutilizados, enquanto componentes perigosos são descartados de maneira segura.', 10),
-('Resíduos Mistos', 'Resíduos mistos consistem em materiais que não se enquadram facilmente em outras categorias, e sua reciclagem envolve a separação e recuperação de componentes valiosos. Embora desafiadora, essa reciclagem contribui para a redução do desperdício e a utilização eficiente de recursos.', 7);
+('Papel', 'A reciclagem de papel é um processo que transforma os papéis usados em novos produtos. Ela reduz a necessidade de desmatamento, economiza energia e água, além de diminuir a quantidade de resíduos sólidos nos aterros sanitários.', 200),
+('Plástico', 'A reciclagem de plástico envolve a coleta, limpeza e transformação de plásticos em novos produtos. Isso ajuda a reduzir a poluição e o consumo de recursos naturais, além de diminuir o impacto ambiental causado pelo descarte inadequado de plásticos.', 800),
+('Vidro', 'Vidro pode ser reciclado indefinidamente sem perder qualidade, o que faz sua reciclagem ser uma prática muito eficiente. O processo de reciclagem de vidro economiza energia e recursos, além de evitar o acúmulo de vidro nos aterros sanitários.', 300),
+('Metais', 'A reciclagem de metais, como alumínio e aço, é altamente eficiente, pois os metais podem ser reutilizados infinitamente sem perder suas propriedades. Esse processo economiza energia e recursos naturais, além de reduzir a emissão de poluentes.', 400),
+('Eletrônicos (Eletroeletrônicos)', 'A reciclagem de eletroeletrônicos envolve a extração de materiais valiosos, como metais preciosos, e o descarte adequado de componentes tóxicos. Isso evita a contaminação ambiental e promove a reutilização de recursos.', 1000),
+('Orgânicos', 'A reciclagem orgânica, geralmente por meio da compostagem, transforma resíduos de alimentos e outros materiais biodegradáveis em adubo, contribuindo para a redução do volume de resíduos e para a melhoria da qualidade do solo.', 500),
+('Têxteis', 'A reciclagem de têxteis envolve o reaproveitamento de materiais têxteis, que podem ser transformados em novos produtos ou reciclados para a produção de fibras. Isso reduz o desperdício e ajuda a diminuir a demanda por novos recursos.', 600),
+('Madeira', 'A reciclagem de madeira é um processo que envolve o reaproveitamento de madeira usada para a fabricação de novos produtos ou como fonte de energia. Isso ajuda a reduzir o desperdício e a preservação de florestas, além de diminuir a emissão de gases poluentes.', 50),
+('Baterias e Pilhas', 'A reciclagem de baterias e pilhas é crucial para evitar a liberação de substâncias tóxicas no meio ambiente. Através desse processo, materiais valiosos, como metais, podem ser recuperados e reutilizados, enquanto componentes perigosos são descartados de maneira segura.', 100),
+('Resíduos Mistos', 'Resíduos mistos consistem em materiais que não se enquadram facilmente em outras categorias, e sua reciclagem envolve a separação e recuperação de componentes valiosos. Embora desafiadora, essa reciclagem contribui para a redução do desperdício e a utilização eficiente de recursos.', 70);
 
 drop table recycle;
 drop table recyclable_item;
@@ -77,3 +77,16 @@ select * from Users;
 select * from collection_point;
 select * from category_item;
 select * from recycle;
+
+
+select recycle.date_recycle, 
+	   category_item.`name`, 
+       recycle. weight_item,
+       collection_point.`name`,
+	   category_item.score_by_kilo * (recycle. weight_item/1000) as score
+       from recycle 
+       left join category_item on recycle.category_id = category_item.id
+       left join collection_point on recycle.point_id = collection_point.id
+       where user_id = 5
+       order by recycle.date_recycle desc;
+       
