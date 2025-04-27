@@ -111,23 +111,93 @@
 
         
 
-        <h1>Hoje</h1>
-        <hr>
-        <h2>Dados da Tabela:</h2>
+        
+{% if hoje %}
+<h1>Hoje</h1>
+    <div class="data-container">
+        {% for linha in hoje %}
+            <div class="data-box">
+                <div class="category-header" data-color="{{ linha['color_hex'] }}">
+                    <h3>{{ linha['category'] }}</h3>
+                    <div class="score-container">+{{ linha['score'] }}</div>
+                </div>
+                <div class="content_card">
+                    <p><strong>Ponto de Coleta: </strong>{{ linha['name'] }}</p>
+                    <p><strong>Data da Reciclagem:</strong> {{ linha['date_recycle'] }}</p>
+                    <p><strong>Peso do Item (kg):</strong> {{ linha['weight_item'] / 1000 }}</p>
+                </div>    
+            </div>
+        {% endfor %}
+    </div>
+    <hr>
+{% else %}
+{% endif %}
 
-     {% if dados %}
-        <ul>
-            {% for linha in dados %}
-                <li>
-                    {% for chave, valor in linha.items() %}
-                        <strong>{{ chave }}:</strong> {{ valor }}<br>
-                    {% endfor %}
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Nenhum dado encontrado no banco.</p>
-    {% endif %} 
+
+{% if ontem %}
+<h1>Ontem</h1>
+    <div class="data-container">
+        {% for linha in ontem %}
+            <div class="data-box">
+                <div class="category-header" data-color="{{ linha['color_hex'] }}">
+                    <h3>{{ linha['category'] }}</h3>
+                    <div class="score-container">+{{ linha['score'] }}</div>
+                </div>
+                <div class="content_card">
+                    <p><strong>Ponto de Coleta: </strong>{{ linha['name'] }}</p>
+                    <p><strong>Data da Reciclagem:</strong> {{ linha['date_recycle'] }}</p>
+                    <p><strong>Peso do Item (kg):</strong> {{ linha['weight_item'] / 1000 }}</p>
+                </div>    
+            </div>
+        {% endfor %}
+    </div>
+    <hr>
+{% else %}
+{% endif %}
+
+
+{% if ainda_esta_semana %}
+<h1>Ainda Esta Semana</h1>
+    <div class="data-container">
+        {% for linha in ainda_esta_semana %}
+            <div class="data-box">
+                <div class="category-header" data-color="{{ linha['color_hex'] }}">
+                    <h3>{{ linha['category'] }}</h3>
+                    <div class="score-container">+{{ linha['score'] }}</div>
+                </div>
+                <div class="content_card">
+                    <p><strong>Ponto de Coleta: </strong>{{ linha['name'] }}</p>
+                    <p><strong>Data da Reciclagem:</strong> {{ linha['date_recycle'] }}</p>
+                    <p><strong>Peso do Item (kg):</strong> {{ linha['weight_item'] / 1000 }}</p>
+                </div>    
+            </div>
+        {% endfor %}
+    </div>
+    <hr>
+{% else %}
+{% endif %}
+
+
+{% if periodo_anterior %}
+<h1>Período Anterior</h1>
+    <div class="data-container">
+        {% for linha in periodo_anterior %}
+            <div class="data-box">
+                <div class="category-header" data-color="{{ linha['color_hex'] }}">
+                    <h3>{{ linha['category'] }}</h3>
+                    <div class="score-container">+{{ linha['score'] }}</div>
+                </div>
+                <div class="content_card">
+                    <p><strong>Ponto de Coleta: </strong>{{ linha['name'] }}</p>
+                    <p><strong>Data da Reciclagem:</strong> {{ linha['date_recycle'] }}</p>
+                    <p><strong>Peso do Item (kg):</strong> {{ linha['weight_item'] / 1000 }}</p>
+                </div>    
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+{% endif %}
+
     </main>
     <script src="{{ url_for('static', filename='Scripts/Script_Home.js') }}"></script>
 </body>

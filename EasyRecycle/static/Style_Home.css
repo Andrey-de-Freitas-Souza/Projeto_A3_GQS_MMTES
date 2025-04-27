@@ -141,6 +141,7 @@ aside hr{
 main h1{
   padding: 0.5%;
   margin-left: 1%;
+  margin-bottom: 1%;
 }
 
 main hr{
@@ -148,6 +149,8 @@ main hr{
   height: 2px; /* Define a altura */
   background-color: rgba(0, 0, 0, 0.116);
   border: none;
+  margin-bottom: 1%;
+  margin-top: 1%;
 }
 
 .Adicionar {
@@ -249,3 +252,82 @@ form input {
   margin-bottom: 1%;  /* Aqui você aplica o espaçamento */
   margin-top: 0.3%;
 }
+
+.data-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+}
+
+/* Estilo para o container dos dados */
+.data-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+}
+
+/* Estilo para o container dos dados */
+.data-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+}
+
+/* Estilo para cada box de dados */
+.data-box {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  width: 90%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.data-box:hover {
+  transform: translateY(0.5%);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo do header da categoria */
+.category-header {
+  display: flex;
+  justify-content: space-between; /* Garante que o título e a pontuação fiquem nas extremidades */
+  align-items: center;            /* Alinha verticalmente */
+  background-color: #4CAF50;      /* Cor verde para o header da categoria */
+  color: white;                   /* Cor branca para o texto */
+  border-radius: 5px;
+  margin-top: 0;                  /* Removendo a margem superior */
+          /* Espaçamento abaixo do header */
+  width: 100%;                    /* Garante que o fundo vai até a borda do card */
+  box-sizing: border-box;         /* Para garantir que o padding e a largura se ajustem corretamente */
+  font-size: 16px;                /* Ajustei o tamanho da fonte para ficar mais proporcional */
+  padding: 0% 1% 0% 1%;
+  line-height: 0.8;
+}
+
+/* Estilo do score ao lado do título */
+.score-container {
+  font-size: 20px;                /* Tamanho maior para a pontuação */
+  font-weight: bold;
+  color: white;                   /* Cor branca para a pontuação */
+}
+
+/* Estilo dos parágrafos dentro da box */
+.content_card p {
+  font-size: 15px;
+  color: #555;
+  text-indent: 1%;
+}
+
+
+.data-box strong {
+  font-weight: bold;
+}
+
+
+

@@ -156,3 +156,7 @@ fetch('/get-collection-points')
       console.error('Erro:', error);
     });
   });
+
+  document.querySelectorAll('.category-header').forEach(header => {
+    header.style.backgroundColor = header.getAttribute('data-color');
+  });

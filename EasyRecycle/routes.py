@@ -9,20 +9,74 @@ routes = Blueprint('routes', __name__)
 def index():
     return render_template("index.html")
 
+from datetime import datetime, timedelta
+
 @routes.route('/home')
 def home():
-     db = get_db_connection()
-     cursor = db.cursor(dictionary=True)
-     cursor.execute("SELECT * FROM teste")
-     dados = cursor.fetchall()
+    # Conectar ao banco de dados e buscar as reciclagens
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    
+    # Supondo que sua tabela de reciclagens se chame 'reciclagens'
+    user_id = session.get('user_info', {}).get('id')
 
-     print("=== Dados vindos do banco ===")
-     for linha in dados:
-         print(linha)
+    if user_id:
+        cursor.execute("""
+                        SELECT 
+                            recycle.date_recycle, 
+                            category_item.`name` as category, 
+                            recycle.weight_item,
+                            collection_point.`name`,
+                            category_item.score_by_kilo * (recycle.weight_item / 1000) AS score,
+                            category_item.color_hex  -- Adiciona a cor em formato hexadecimal
+                        FROM recycle
+                        LEFT JOIN category_item ON recycle.category_id = category_item.id
+                        LEFT JOIN collection_point ON recycle.point_id = collection_point.id
+                        WHERE recycle.user_id = %s
+                        ORDER BY recycle.date_recycle DESC;
+                    """, (user_id,))
+    else:
+        print("Erro: Usuário não autenticado")
+    
+    dados = cursor.fetchall()
 
-     cursor.close()
-     db.close()
-     return render_template("home.html",dados=dados)
+    # Formatar a data no formato 'dd/mm/yyyy'
+    for linha in dados:
+        linha['date_recycle'] = linha['date_recycle'].strftime('%d/%m/%Y')  # Formata a data
+
+    # Separar os dados nas categorias: Hoje, Ontem, Ainda esta semana, Período anterior
+    hoje = []
+    ontem = []
+    ainda_esta_semana = []
+    periodo_anterior = []
+
+    hoje_data = datetime.today()
+    ontem_data = hoje_data - timedelta(days=1)
+    inicio_semana = hoje_data - timedelta(days=hoje_data.weekday())  # Início da semana
+    fim_semana = inicio_semana + timedelta(days=6)  # Fim da semana
+
+    for linha in dados:
+        # Convertendo a data para datetime
+        data_recycle = datetime.strptime(linha['date_recycle'], '%d/%m/%Y')
+
+        # Verificando se a data é hoje
+        if data_recycle.date() == hoje_data.date():
+            hoje.append(linha)
+        # Verificando se a data é ontem
+        elif data_recycle.date() == ontem_data.date():
+            ontem.append(linha)
+        # Verificando se a data está dentro da mesma semana
+        elif inicio_semana.date() <= data_recycle.date() <= fim_semana.date():
+            ainda_esta_semana.append(linha)
+        else:
+            periodo_anterior.append(linha)
+
+    cursor.close()
+    conn.close()
+
+    # Passar os dados para o template
+    return render_template('home.html', hoje=hoje, ontem=ontem, ainda_esta_semana=ainda_esta_semana, periodo_anterior=periodo_anterior)
+
 
 @routes.route('/Points')
 def Points():
