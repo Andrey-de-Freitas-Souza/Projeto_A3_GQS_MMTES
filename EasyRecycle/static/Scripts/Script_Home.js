@@ -134,4 +134,25 @@ fetch('/get-collection-points')
     }, 500);
   });
 
-
+  document.getElementById('formCadastro').addEventListener('submit', function(event) {
+    event.preventDefault(); // Impede o reload da página
+  
+    const category = document.getElementById('categorySelect').value;
+    const collection_point = document.getElementById('collection_point').value;
+    const peso = document.getElementById('peso').value;
+  
+    fetch('/cadastrar-reciclagem', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ category, collection_point, peso })
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message); // Mensagem de sucesso ou erro
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+    });
+  });

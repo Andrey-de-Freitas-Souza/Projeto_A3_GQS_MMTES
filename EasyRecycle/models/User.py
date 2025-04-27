@@ -53,6 +53,20 @@ class User:
 
         return {"message": "Usuário cadastrado com sucesso!"}
 
+    def to_dict(self):
+        return {
+            "id" : self.id,
+            "name" : self.name,
+            "email" : self.email,
+            "password" : self.password,
+            "phone" : self.phone,
+            "address" : self.address,
+            "points" : self.points,
+            "registration_date" : self.registration_date,
+            "status" : self.status,
+            "last_login_date" : self.last_login_date,
+            "birth_date" : self.birth_date
+        }
     @staticmethod
     def login(email, password):
         """Método para login do usuário e retornar um objeto com as informações"""
@@ -73,21 +87,28 @@ class User:
             cursor.close()
             conn.close()
 
-            # Criar um dicionário com todas as informações do usuário
-            user_info = {
-                "id": user['id'],
-                "name": user['name'],
-                "email": user['email'],
-                "last_login_date": last_login_date.isoformat(),  # Para garantir que a data seja serializada corretamente
-                "cep": user.get('address')  # Assumindo que o campo 'address' contém o CEP
-            }
+            # Criar um objeto Users
+            user_obj = User(
+                id=user['id'],
+                name=user['name'],
+                email=user['email'],
+                password=user['password'],
+                phone=user['phone'],
+                address=user['address'],
+                points=user['points'],
+                registration_date=user['registration_date'],
+                status=user['status'],
+                last_login_date=last_login_date,
+                birth_date=user['birth_date']
+            )
 
             # Armazenar as informações do usuário na sessão
-            session['user_info'] = user_info
+            session['user_info'] = user_obj.to_dict()
 
             # Retornar a resposta
-            return {"message": "Login bem-sucedido", "user": user_info}
+            return {"message": "Login bem-sucedido", "user": user_obj.to_dict()}
 
         cursor.close()
         conn.close()
         return {"message": "Credenciais inválidas"}
+

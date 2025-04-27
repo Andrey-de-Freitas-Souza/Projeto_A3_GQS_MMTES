@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify
+from flask import Blueprint, render_template, request, jsonify, session
 from models.User import User
 from ConnectionDB import get_db_connection
 from datetime import datetime
@@ -117,4 +117,34 @@ def get_collection_points():
 
     return jsonify(points)
 
+@routes.route('/cadastrar-reciclagem', methods=['POST'])
+def cadastrar_reciclagem():
+    data = request.get_json()
+    user_info = session.get('user_info')
+    if not user_info:
+        return {"message": "Usuário não autenticado"}, 401
+
+    user_id = user_info['id']  # Aqui você pega o id do usuário
+    date_recycle = datetime.now()
+    category_id = data.get('category')
+    point_id = data.get('collection_point')
+    weight_item = data.get('peso')
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
     
+    try:
+        cursor.execute("""
+            INSERT INTO recycle (user_id, category_id, weight_item, point_id, date_recycle)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (user_id, category_id, weight_item, point_id, date_recycle))
+
+        conn.commit()
+        return jsonify({"message": "Reciclagem cadastrada com sucesso!"})
+    except Exception as e:
+        conn.rollback()
+        print("Erro ao cadastrar reciclagem:", e)
+        return jsonify({"message": "Erro ao cadastrar reciclagem."}), 500
+    finally:
+        cursor.close()
+        conn.close()
