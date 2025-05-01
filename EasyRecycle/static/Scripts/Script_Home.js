@@ -27,6 +27,36 @@ document.addEventListener('click', (event) => {
   }
 });
 
+const sidebar_direito = document.getElementById('sidebar_direito');
+const hamburgerIcon_direito = document.getElementById('Profile');
+
+let menu_direito_Aberto = false;
+
+hamburgerIcon_direito.addEventListener('click', () => {
+  menu_direito_Aberto = !menu_direito_Aberto;
+
+  if (menu_direito_Aberto) {
+    sidebar_direito.classList.add('translate-x-0');
+    sidebar_direito.classList.remove('translate-x-full');
+  } else {
+    sidebar_direito.classList.remove('translate-x-0');
+    sidebar_direito.classList.add('translate-x-full');
+  }
+});
+
+// Fecha o menu ao clicar fora
+document.addEventListener('click', (event) => {
+  const isClickInsideSidebar = sidebar_direito.contains(event.target);
+  const isClickOnHamburger = hamburgerIcon_direito.contains(event.target);
+
+  if (!isClickInsideSidebar && !isClickOnHamburger && menu_direito_Aberto) {
+    sidebar_direito.classList.remove('translate-x-0');
+    sidebar_direito.classList.add('translate-x-full');
+    menu_direito_Aberto = false;
+  }
+});
+
+
 const btnAdicionar = document.getElementById('btnAdicionar');
 const fecharModal = document.getElementById('fecharModal');
 const modalOverlay = document.getElementById('modalOverlay');

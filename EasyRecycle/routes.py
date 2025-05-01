@@ -202,3 +202,244 @@ def cadastrar_reciclagem():
     finally:
         cursor.close()
         conn.close()
+
+@routes.route('/recycle_by_category')
+def dados_reciclados():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT 
+            category_item.name, 
+            recycle.weight_item / 1000 as weight_item,
+            category_item.color_hex
+        FROM recycle 
+        LEFT JOIN category_item ON recycle.category_id = category_item.id;
+    """)
+    resultados = cursor.fetchall()
+
+    from collections import defaultdict
+    categoria_peso = defaultdict(float)
+    cores = {}
+
+    for nome, peso, cor in resultados:
+        categoria_peso[nome] += peso
+        cores[nome] = cor  # salva a cor da categoria
+
+    labels = list(categoria_peso.keys())
+    series = [round(categoria_peso[label], 2) for label in labels]
+    colors = [cores[label] for label in labels]
+
+    return jsonify({
+        "labels": labels,
+        "series": series,
+        "colors": colors
+    })
+
+
+@routes.route('/first_recycle')
+def first_recycle():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Utiliza a CTE para obter a categoria mais reciclada
+    cursor.execute("""
+        WITH top_category AS (
+            SELECT recycle.category_id
+            FROM recycle
+            GROUP BY recycle.category_id
+            ORDER BY SUM(recycle.weight_item) DESC
+            LIMIT 1
+        )
+        SELECT 
+            category_item.name,
+            recycle.date_recycle,
+            recycle.weight_item,
+            category_item.color_hex
+        FROM recycle
+        JOIN top_category ON recycle.category_id = top_category.category_id
+        JOIN category_item ON recycle.category_id = category_item.id;
+    """)
+
+    rows = cursor.fetchall()
+
+    # Extrair nome da categoria e cor (todas as linhas terão os mesmos valores)
+    category_name = rows[0][0] if rows else "Categoria"
+    color_hex = rows[0][3] if rows else "#cccccc"
+
+    # Agrupar os dados por data
+    from collections import defaultdict
+    data_por_dia = defaultdict(float)
+    for _, data, peso, _ in rows:
+        data_por_dia[data.date()] += peso
+
+    # Ordenar por data e preparar os dados
+    labels = sorted(data_por_dia.keys())
+    series = [round(data_por_dia[data] / 1000, 2) for data in labels]  # converter para Kg
+    labels = [data.isoformat() for data in labels]
+
+    # Peso total
+    total_peso = round(sum(series), 2)
+
+    return jsonify({
+        "labels": labels,
+        "series": series,
+        "category": category_name,
+        "color": color_hex,
+        "total": total_peso
+    })
+
+
+@routes.route('/second_recycle')
+def second_recycle():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Utiliza a CTE para obter a categoria mais reciclada
+    cursor.execute("""
+        WITH top_category AS (
+            SELECT recycle.category_id
+            FROM recycle
+            GROUP BY recycle.category_id
+            ORDER BY SUM(recycle.weight_item) DESC
+            LIMIT 1
+            OFFSET 1
+        )
+        SELECT 
+            category_item.name,
+            recycle.date_recycle,
+            recycle.weight_item,
+            category_item.color_hex
+        FROM recycle
+        JOIN top_category ON recycle.category_id = top_category.category_id
+        JOIN category_item ON recycle.category_id = category_item.id;
+    """)
+
+    rows = cursor.fetchall()
+
+    # Extrair nome da categoria e cor (todas as linhas terão os mesmos valores)
+    category_name = rows[0][0] if rows else "Categoria"
+    color_hex = rows[0][3] if rows else "#cccccc"
+
+    # Agrupar os dados por data
+    from collections import defaultdict
+    data_por_dia = defaultdict(float)
+    for _, data, peso, _ in rows:
+        data_por_dia[data.date()] += peso
+
+    # Ordenar por data e preparar os dados
+    labels = sorted(data_por_dia.keys())
+    series = [round(data_por_dia[data] / 1000, 2) for data in labels]  # converter para Kg
+    labels = [data.isoformat() for data in labels]
+
+    # Peso total
+    total_peso = round(sum(series), 2)
+
+    return jsonify({
+        "labels": labels,
+        "series": series,
+        "category": category_name,
+        "color": color_hex,
+        "total": total_peso
+    })
+
+@routes.route('/third_recycle')
+def third_recycle():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Utiliza a CTE para obter a categoria mais reciclada
+    cursor.execute("""
+        WITH top_category AS (
+            SELECT recycle.category_id
+            FROM recycle
+            GROUP BY recycle.category_id
+            ORDER BY SUM(recycle.weight_item) DESC
+            LIMIT 1
+            OFFSET 2
+        )
+        SELECT 
+            category_item.name,
+            recycle.date_recycle,
+            recycle.weight_item,
+            category_item.color_hex
+        FROM recycle
+        JOIN top_category ON recycle.category_id = top_category.category_id
+        JOIN category_item ON recycle.category_id = category_item.id;
+    """)
+
+    rows = cursor.fetchall()
+
+    # Extrair nome da categoria e cor (todas as linhas terão os mesmos valores)
+    category_name = rows[0][0] if rows else "Categoria"
+    color_hex = rows[0][3] if rows else "#cccccc"
+
+    # Agrupar os dados por data
+    from collections import defaultdict
+    data_por_dia = defaultdict(float)
+    for _, data, peso, _ in rows:
+        data_por_dia[data.date()] += peso
+
+    # Ordenar por data e preparar os dados
+    labels = sorted(data_por_dia.keys())
+    series = [round(data_por_dia[data] / 1000, 2) for data in labels]  # converter para Kg
+    labels = [data.isoformat() for data in labels]
+
+    # Peso total
+    total_peso = round(sum(series), 2)
+
+    return jsonify({
+        "labels": labels,
+        "series": series,
+        "category": category_name,
+        "color": color_hex,
+        "total": total_peso
+    })
+
+
+@routes.route('/peso_por_categoria_data')
+def peso_por_categoria_data():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT 
+            category_item.name,
+            category_item.color_hex,
+            DATE(recycle.date_recycle) as data,
+            SUM(recycle.weight_item)/1000.0 as peso_kg
+        FROM recycle
+        JOIN category_item ON recycle.category_id = category_item.id
+        GROUP BY category_item.name, category_item.color_hex, DATE(recycle.date_recycle)
+        ORDER BY data ASC;
+    """)
+    rows = cursor.fetchall()
+
+    from collections import defaultdict
+    import datetime
+
+    categorias = defaultdict(lambda: defaultdict(float))
+    cores = {}
+
+    # Organiza os dados por categoria e por data
+    for nome, cor, data, peso in rows:
+        categorias[nome][data] += peso
+        cores[nome] = cor
+
+    # Define todas as datas únicas em ordem
+    todas_datas = sorted({data for cat in categorias.values() for data in cat})
+    labels = [data.isoformat() for data in todas_datas]
+
+    # Constrói as series no formato esperado pelo ApexCharts
+    series = []
+    for categoria, pesos_por_data in categorias.items():
+        serie = {
+            "name": categoria,
+            "data": [round(pesos_por_data.get(data, 0), 2) for data in todas_datas]
+        }
+        series.append(serie)
+
+    return jsonify({
+        "labels": labels,
+        "series": series,
+        "colors": [cores[nome] for nome in categorias.keys()]
+    })
+

@@ -15,19 +15,30 @@ body {
 }
 
 header {
+  position: fixed; /* Fixa o header no topo */
+  top: 0;
+  left: 0;
+  width: 100%; /* Garante que ocupe a largura total */
+  z-index: 50; /* Fica acima de outros elementos */
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
   height: 70px;
   background-color: var(--Background_color);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .logo {
   position: relative;
   z-index: 50;
 }
+
+
 
 .menu-icon {
   position: relative;
@@ -57,6 +68,8 @@ header {
 }
 
 .header-icons {
+  position: relative;
+  z-index: 50;
   display: flex;
   align-items: center;
   gap: 15px;
@@ -138,6 +151,63 @@ aside hr{
   border: none;
 }
 
+/* Sidebar direito */
+.sidebar_direito {
+  position: fixed;
+  top: 0;
+  right: 0;
+  transform: translateX(100%);
+  width: 300px;
+  height: 100%;
+  background-color: var(--Background_color);
+  color: black;
+  transition: transform 0.3s ease;
+  padding-top: 60px;
+  z-index: 40;
+}
+
+.sidebar_direito.translate-x-0 {
+  transform: translateX(0);
+}
+
+.sidebar_direito.-translate-x-full {
+  transform: translateX(-100%);
+}
+
+.sidebar_direito ul {
+  list-style: none;
+  width: 100%;
+  padding: 0 10px; /* dá espaço nas laterais */
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.sidebar_direito ul li a {
+  color: black;
+  text-decoration: none;
+  display: block;
+  transition: background 0.2s;
+  padding: 15px 10px; /* 15px vertical, 10px horizontal */
+  border-radius: 8px;
+}
+
+.sidebar_direito ul li a:hover {
+  background-color: var(--hand_over_color);
+  font-weight: bold;
+}
+
+/* .topicos{
+  margin-left: 3%;
+  font-weight: bold;
+}
+
+aside hr{
+  width: 90%;
+  height: 2px; 
+  background-color: rgba(0, 0, 0, 0.116);
+  border: none;
+} */
+
 main h1{
   padding: 0.5%;
   margin-left: 1%;
@@ -160,7 +230,7 @@ main hr{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1% auto 0 auto;
+  margin: 100px auto 0 auto;
   padding: 10px 15px;
   box-sizing: border-box; /* <-- Adicionado */
   overflow-x: hidden; /* <-- Adicional para segurança */
