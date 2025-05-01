@@ -90,3 +90,54 @@ select recycle.date_recycle,
        where user_id = 5
        order by recycle.date_recycle desc;
        
+SELECT 	category_item.`name`, 
+		sum(recycle.weight_item/ 1000) as weight_item 
+FROM recycle 
+left join category_item 
+on recycle.category_id = category_item.id  
+group by category_item.`name`
+order by weight_item desc;
+
+
+SELECT recycle.date_recycle,
+		query_1.`name`
+from recycle
+left join (	SELECT 	category_item.id, 
+					category_item.`name`,
+					SUM(recycle.weight_item) AS total_weight
+			FROM recycle 
+			LEFT JOIN category_item ON recycle.category_id = category_item.id  
+			GROUP BY category_item.id, category_item.name
+			ORDER BY total_weight DESC
+			LIMIT 1) query_1
+        on query_1.id = recycle.category_id
+        where `name` is not null ;
+
+SELECT category_item.`name`, recycle.date_recycle FROM recycle left join category_item on recycle.category_id = category_item.id order by recycle.weight_item desc;
+
+SELECT 
+    category_item.id, 
+    category_item.name,
+    SUM(recycle.weight_item) AS total_weight
+FROM recycle 
+LEFT JOIN category_item ON recycle.category_id = category_item.id  
+GROUP BY category_item.id, category_item.name
+ORDER BY total_weight DESC
+LIMIT 1;
+
+WITH top_category AS (
+  SELECT 
+    recycle.category_id
+  FROM recycle
+  GROUP BY recycle.category_id
+  ORDER BY SUM(recycle.weight_item) DESC
+  LIMIT 1
+)
+
+SELECT 
+  category_item.name,
+  recycle.date_recycle,
+  recycle.weight_item
+FROM recycle
+JOIN top_category ON recycle.category_id = top_category.category_id
+JOIN category_item ON recycle.category_id = category_item.id;
