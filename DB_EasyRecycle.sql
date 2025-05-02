@@ -73,10 +73,35 @@ CREATE TABLE recycle (
     date_recycle DATETIME
 );
 
+CREATE TABLE user_friendship (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    requesting_user_id INT,
+    approver_user_id INT,
+    status VARCHAR(10) DEFAULT 'Solicitado',
+    date_friend DATETIME DEFAULT CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (requesting_user_id) REFERENCES users(id),
+    FOREIGN KEY (approver_user_id) REFERENCES users(id)
+);
+
+
+CREATE TABLE user_notification (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    type_notification VARCHAR(50) NOT NULL,
+    message TEXT,
+    is_read BOOLEAN DEFAULT FALSE,
+    date_notification DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+
 select * from Users;
 select * from collection_point;
 select * from category_item;
 select * from recycle;
+select * from user_notification;
+select * from user_friendship;
 
 
 select recycle.date_recycle, 
@@ -141,3 +166,41 @@ SELECT
 FROM recycle
 JOIN top_category ON recycle.category_id = top_category.category_id
 JOIN category_item ON recycle.category_id = category_item.id;
+
+
+
+ WITH ranked_categories AS (
+    SELECT 
+        recycle.category_id,
+        SUM(recycle.weight_item) AS total_weight,
+        ROW_NUMBER() OVER (ORDER BY SUM(recycle.weight_item) DESC) AS `rank`
+    FROM recycle
+    GROUP BY recycle.category_id
+)
+SELECT 
+    category_item.name,
+    recycle.date_recycle,
+    recycle.weight_item,
+    category_item.color_hex
+FROM recycle
+JOIN ranked_categories ON recycle.category_id = ranked_categories.category_id
+JOIN category_item ON recycle.category_id = category_item.id
+WHERE ranked_categories. `rank`= 3;
+
+
+select * from user_friendship;
+SELECT * FROM user_friendship 
+        WHERE (requesting_user_id = 5 AND approver_user_id = 1) 
+           OR (requesting_user_id = 1 AND approver_user_id = 5);
+           
+SELECT users.id, users.name, user_friendship.status, user_friendship.date_friend  
+FROM users
+JOIN user_friendship ON (users.id = user_friendship.requesting_user_id)
+WHERE (user_friendship.approver_user_id = 1)
+AND user_friendship.status = 'Solicitado';
+
+SELECT u.id, u.name, uf.status, uf.date_friend
+FROM users u
+JOIN user_friendship uf ON (u.id = uf.requesting_user_id)
+WHERE uf.approver_user_id = 4  -- Troque 1 pelo id de um usuário que você quer testar
+AND uf.status = 'Solicitado';
