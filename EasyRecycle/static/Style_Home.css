@@ -323,20 +323,7 @@ form input {
   margin-top: 0.3%;
 }
 
-.data-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-around;
-}
 
-/* Estilo para o container dos dados */
-.data-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: space-around;
-}
 
 /* Estilo para o container dos dados */
 .data-container {

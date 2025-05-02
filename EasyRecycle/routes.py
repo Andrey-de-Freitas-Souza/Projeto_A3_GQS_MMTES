@@ -82,9 +82,6 @@ def home():
 def Points():
     return render_template('Points.html')
 
-@routes.route('/AddFriend')
-def AddFriend():
-    return render_template('AddFriend.html')
 
 @routes.route('/Graphics')
 def Graphics():
@@ -243,21 +240,23 @@ def first_recycle():
 
     # Utiliza a CTE para obter a categoria mais reciclada
     cursor.execute("""
-        WITH top_category AS (
-            SELECT recycle.category_id
-            FROM recycle
-            GROUP BY recycle.category_id
-            ORDER BY SUM(recycle.weight_item) DESC
-            LIMIT 1
-        )
-        SELECT 
-            category_item.name,
-            recycle.date_recycle,
-            recycle.weight_item,
-            category_item.color_hex
-        FROM recycle
-        JOIN top_category ON recycle.category_id = top_category.category_id
-        JOIN category_item ON recycle.category_id = category_item.id;
+WITH ranked_categories AS (
+SELECT 
+    recycle.category_id,
+    SUM(recycle.weight_item) AS total_weight,
+    ROW_NUMBER() OVER (ORDER BY SUM(recycle.weight_item) DESC) AS `rank`
+FROM recycle
+GROUP BY recycle.category_id
+)
+SELECT 
+    category_item.name,
+    recycle.date_recycle,
+    recycle.weight_item,
+    category_item.color_hex
+FROM recycle
+JOIN ranked_categories ON recycle.category_id = ranked_categories.category_id
+JOIN category_item ON recycle.category_id = category_item.id
+WHERE ranked_categories. `rank`= 1;
     """)
 
     rows = cursor.fetchall()
@@ -296,22 +295,23 @@ def second_recycle():
 
     # Utiliza a CTE para obter a categoria mais reciclada
     cursor.execute("""
-        WITH top_category AS (
-            SELECT recycle.category_id
-            FROM recycle
-            GROUP BY recycle.category_id
-            ORDER BY SUM(recycle.weight_item) DESC
-            LIMIT 1
-            OFFSET 1
-        )
-        SELECT 
-            category_item.name,
-            recycle.date_recycle,
-            recycle.weight_item,
-            category_item.color_hex
-        FROM recycle
-        JOIN top_category ON recycle.category_id = top_category.category_id
-        JOIN category_item ON recycle.category_id = category_item.id;
+WITH ranked_categories AS (
+SELECT 
+    recycle.category_id,
+    SUM(recycle.weight_item) AS total_weight,
+    ROW_NUMBER() OVER (ORDER BY SUM(recycle.weight_item) DESC) AS `rank`
+FROM recycle
+GROUP BY recycle.category_id
+)
+SELECT 
+    category_item.name,
+    recycle.date_recycle,
+    recycle.weight_item,
+    category_item.color_hex
+FROM recycle
+JOIN ranked_categories ON recycle.category_id = ranked_categories.category_id
+JOIN category_item ON recycle.category_id = category_item.id
+WHERE ranked_categories. `rank`= 2;
     """)
 
     rows = cursor.fetchall()
@@ -349,22 +349,23 @@ def third_recycle():
 
     # Utiliza a CTE para obter a categoria mais reciclada
     cursor.execute("""
-        WITH top_category AS (
-            SELECT recycle.category_id
-            FROM recycle
-            GROUP BY recycle.category_id
-            ORDER BY SUM(recycle.weight_item) DESC
-            LIMIT 1
-            OFFSET 2
-        )
-        SELECT 
-            category_item.name,
-            recycle.date_recycle,
-            recycle.weight_item,
-            category_item.color_hex
-        FROM recycle
-        JOIN top_category ON recycle.category_id = top_category.category_id
-        JOIN category_item ON recycle.category_id = category_item.id;
+WITH ranked_categories AS (
+SELECT 
+    recycle.category_id,
+    SUM(recycle.weight_item) AS total_weight,
+    ROW_NUMBER() OVER (ORDER BY SUM(recycle.weight_item) DESC) AS `rank`
+FROM recycle
+GROUP BY recycle.category_id
+)
+SELECT 
+    category_item.name,
+    recycle.date_recycle,
+    recycle.weight_item,
+    category_item.color_hex
+FROM recycle
+JOIN ranked_categories ON recycle.category_id = ranked_categories.category_id
+JOIN category_item ON recycle.category_id = category_item.id
+WHERE ranked_categories. `rank`= 3;
     """)
 
     rows = cursor.fetchall()
@@ -442,4 +443,109 @@ def peso_por_categoria_data():
         "series": series,
         "colors": [cores[nome] for nome in categorias.keys()]
     })
+
+
+@routes.route('/verificar-email', methods=['POST'])
+def verificar_email():
+    data = request.get_json()
+    email_destino = data.get('email')
+    user_info = session.get('user_info')
+
+    if not user_info or not user_info.get('id'):
+        return jsonify({"erro": "Usuário não autenticado"}), 401
+
+    id_remetente = user_info['id']
+
+    # Conexão com o banco de dados
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Verifica se o e-mail existe
+    cursor.execute("SELECT id, name, status FROM users WHERE email = %s", (email_destino,))
+    usuario_destino = cursor.fetchone()
+
+    if not usuario_destino:
+        conn.close()
+        return jsonify({"existe": False, "mensagem": "Este e-mail não está cadastrado no sistema."})
+
+    id_destinatario = usuario_destino['id']
+    nome_remetente = user_info['name']
+
+    # Verifica se já existe uma solicitação de amizade com status 'Solicitado'
+    cursor.execute("""
+        SELECT * FROM user_friendship
+        WHERE (requesting_user_id = %s AND approver_user_id = %s)
+        OR (requesting_user_id = %s AND approver_user_id = %s)
+    """, (id_remetente, id_destinatario, id_destinatario, id_remetente))
+
+    amizade_existente = cursor.fetchone()
+
+    if amizade_existente:
+        if amizade_existente['status'] == 'Solicitado':
+            conn.close()
+            return jsonify({"existe": True, "mensagem": "Convite já enviado. A solicitação de amizade está pendente."})
+
+        elif amizade_existente['status'] == 'Aceito':
+            conn.close()
+            return jsonify({"existe": True, "mensagem": "Você já são amigos!"})
+
+    # Caso não tenha amizade ou convite pendente, insere amizade
+    cursor.execute("""
+        INSERT INTO user_friendship (requesting_user_id, approver_user_id, status)
+        VALUES (%s, %s, 'Solicitado')
+    """, (id_remetente, id_destinatario))
+
+    # Insere notificação para o destinatário
+    cursor.execute("""
+        INSERT INTO user_notification (user_id, type_notification, message)
+        VALUES (%s, 'Convite de amizade', %s)
+    """, (id_destinatario, f"{nome_remetente} te enviou um convite de amizade."))
+
+    conn.commit()
+
+    # Fechar conexão
+    cursor.close()
+    conn.close()
+
+    return jsonify({"existe": True, "mensagem": "Convite de amizade enviado com sucesso!"})
+
+@routes.route('/AddFriend', methods=['GET'])
+def solicitacoes_pendentes():
+    print("Rota /solicitacoes acessada")
+    user_info = session.get('user_info')
+
+    if not user_info or not user_info.get('id'):
+        return jsonify({"erro": "Usuário não autenticado"}), 401
+
+    id_usuario = user_info['id']
+
+    # Conexão com o banco de dados
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Consulta para pegar solicitações pendentes em que o usuário logado é o approver (quem pode aprovar)
+    cursor.execute("""
+        SELECT u.id, u.name, uf.status, uf.date_friend
+        FROM users u
+        JOIN user_friendship uf ON (u.id = uf.requesting_user_id)
+        WHERE uf.approver_user_id = %s
+        AND uf.status = 'Solicitado'
+    """, (id_usuario,))
+
+    solicitacoes = cursor.fetchall()
+    print(f"Solicitações pendentes: {solicitacoes}")
+    cursor.close()
+    conn.close()
+
+    # Retorna as solicitações pendentes
+    return render_template('AddFriend.html', solicitacao=solicitacoes)
+
+
+
+
+
+
+
+
+
 
