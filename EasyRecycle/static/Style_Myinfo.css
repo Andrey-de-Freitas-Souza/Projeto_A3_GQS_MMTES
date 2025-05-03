@@ -1,0 +1,53 @@
+main{
+    margin-top: 100px;
+}
+
+h2 {
+    padding: 0.5%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+  }
+
+
+  .Profile_info {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: green solid 10px;
+  }
+  
+  #uploadBtn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  #uploadBtn:hover {
+    background-color: #45a049;
+  }
+  
+  .profile-container,
+.upload-btn-container,
+.user-info-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px; /* Espaço entre os blocos */
+}
+
+/* Garante que os <p> fiquem alinhados à esquerda */
+.user-info-container p {
+  text-align: left;
+  width: 100%;
+  max-width: 400px; /* Limita a largura das informações, caso necessário */
+}
+  
+  
+  
+  

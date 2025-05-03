@@ -141,27 +141,31 @@ function mascaraData(event) {
 });
 
 document.getElementById('btnLogin').addEventListener('click', function(e) {
-    e.preventDefault();
-  
-    const form = document.getElementById('login-form');
-    const formData = new FormData(form);
-  
-    fetch('/login', {
-      method: 'POST',
-      body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Resposta do servidor:', data);
-      if (data.message === "Login bem-sucedido") {
-        // Se o login foi sucesso, redireciona
-        window.location.href = '/home';  // <-- Coloque aqui a rota da sua página home
-      } else {
-        alert('Email ou senha inválidos!');
-      }
-    })
-    .catch((error) => console.error('Erro:', error));
-  });
+  e.preventDefault();
+
+  const form = document.getElementById('login-form');
+  const formData = new FormData(form);
+
+  fetch('/login', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Resposta do servidor:', data);
+    if (data.message === "Login bem-sucedido") {
+      // Salva as informações do usuário no sessionStorage
+      sessionStorage.setItem('user_info', JSON.stringify(data.user_info));
+
+      // Se o login foi sucesso, redireciona para a página inicial
+      window.location.href = '/home';  // <-- Coloque aqui a rota da sua página home
+    } else {
+      alert('Email ou senha inválidos!');
+    }
+  })
+  .catch((error) => console.error('Erro:', error));
+});
+
   
 
 

@@ -1,0 +1,189 @@
+main{
+    margin-top: 100px;
+}
+
+h2 {
+    padding: 0.5%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+  }
+
+  .toggle-Amigos h2 {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    padding: 0.5%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+  }
+
+  .toggle-Podio h2 {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    padding: 0.5%;
+    margin-left: 1%;
+    margin-bottom: 1%;
+  }
+/* podio */
+.podio {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 40px;
+    height: 40%;
+    margin: 20px 0;
+  }
+  
+  .coluna {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 15%;
+  }
+
+  .coluna.centro {
+    order: 2; /* Primeiro colocado no centro */
+}
+
+.coluna.esquerda {
+    order: 1; /* Segundo colocado à esquerda */
+}
+
+.coluna.direita {
+    order: 3; /* Terceiro colocado à direita */
+    
+}
+  
+  .foto-perfil-podio {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 12%;
+    z-index: 2;
+    border:black solid 2px;
+  }
+  .borda-ouro {
+    border: 5px solid #FFD700; /* Dourado */
+}
+
+.borda-prata {
+    border: 5px solid #C0C0C0; /* Prata */
+}
+
+.borda-bronze {
+    border: 5px solid #CD7F32; /* Bronze */
+}
+
+  .barra {
+    width: 100%;
+    background-color: #4CAF50;
+    border-radius: 3px 3px 0 0;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+ .pontos {
+    position: absolute;
+    top: 1.5%;
+    font-weight: bolder;
+    font-size: 2em;
+    color: white;
+    
+  }
+  
+ /* Cor da barra do primeiro colocado */
+.ouro_col {
+    background-color: #FFD700; /* Dourado */
+}
+
+/* Cor da barra do segundo colocado */
+.prata_col {
+    background-color: #C0C0C0; /* Prateado */
+}
+
+/* Cor da barra do terceiro colocado */
+.bronze_col {
+    background-color: #CD7F32; /* Bronzeado */
+}
+  
+  .nome-podio {
+    margin-top: 8px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  
+  .data-container-friend {
+    width: 95%;
+    margin: 0 auto 16px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+  
+  /* RANKING à esquerda */
+  .ranking {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: lightgray;
+    min-width: 60px; /* garante espaço fixo */
+    text-align: center;
+  }
+  
+  /* PERFIL com imagem e nome */
+  .perfil-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1; /* ocupa o espaço central */
+  }
+  
+  .perfil-info img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  .nome {
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  /* PONTOS à direita */
+  .points {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .ranking.ouro {
+    color: #FFD700; /* dourado */
+  }
+  
+  .ranking.prata {
+    color: #C0C0C0; /* prateado */
+  }
+  
+  .ranking.bronze {
+    color: #CD7F32; /* bronze */
+  }
+
+  .ranking.cinza {
+    color: lightgrey; /* bronze */
+  }
+  
+  

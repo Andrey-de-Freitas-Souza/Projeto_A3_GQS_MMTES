@@ -1,29 +1,82 @@
 .data-container-friend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-around;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    width: 90%;                     /* A largura ocupa 90% da tela */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    flex-direction: column;
-
-    margin: 0 auto;                  /* Centraliza horizontalmente */
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 16px;
 }
-  
 
-  
-  .data-container-friend:hover {
-    transform: translateY(0.5%);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  }
+.perfil-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-  .data-container-friend p {
-    font-size: 15px;
-    color: #555;
-    text-indent: 1%;
-  }
-  
+.perfil-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.nome {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.acoes-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.data-solicitacao {
+  color: gray;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  text-align: right;
+}
+
+.botoes {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-aceitar,
+.btn-recusar,
+.btn-remover {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-aceitar {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.btn-recusar {
+  background-color: #f44336;
+  color: white;
+}
+.btn-remover{
+  background-color: #f44336;
+  color: white;
+}
+
+.toggle-solicitacoes h2 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+  padding: 0.5%;
+  margin-left: 1%;
+  margin-bottom: 1%;
+}

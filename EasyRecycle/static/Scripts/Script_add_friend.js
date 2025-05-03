@@ -119,9 +119,122 @@ async function enviarConvite(event) {
     }
 }
 
+function toggleSolicitacoes() {
+    const lista = document.getElementById("lista-solicitacoes");
+    const seta = document.getElementById("seta");
+
+    if (lista.style.display === "none") {
+        lista.style.display = "block";
+        seta.innerHTML = "&#9650;"; // seta para cima
+    } else {
+        lista.style.display = "none";
+        seta.innerHTML = "&#9660;"; // seta para baixo
+    }
+}
+
+function toggleAmigos() {
+  const lista = document.getElementById("lista-amigos");
+  const seta = document.getElementById("seta2");
+
+  if (lista.style.display === "none") {
+      lista.style.display = "block";
+      seta.innerHTML = "&#9650;"; // seta para cima
+  } else {
+      lista.style.display = "none";
+      seta.innerHTML = "&#9660;"; // seta para baixo
+  }
+}
+
+window.onload = function() {
+  var img = document.getElementById('Profile');
+
+  // Função que será chamada se a imagem falhar ao carregar
+  img.onerror = function() {
+    this.src = "{{ url_for('static', filename='Images/Profile.jpg') }}";
+  };
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Lógica para o botão aceitar
+  document.querySelectorAll(".btn-aceitar").forEach(button => {
+    button.addEventListener("click", function() {
+      const conviteId = this.closest(".botoes-amizade").getAttribute("data-id");
+
+      // Envia para o backend para aceitar o convite
+      fetch("/amizade/aceitar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          convite_id: conviteId
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert("Convite aceito com sucesso!");
+        } else {
+          alert(data.message);
+        }
+      });
+    });
+  });
+
+  // Lógica para o botão recusar
+  document.querySelectorAll(".btn-recusar").forEach(button => {
+    button.addEventListener("click", function() {
+      const conviteId = this.closest(".botoes-amizade").getAttribute("data-id");
+
+      // Envia para o backend para recusar o convite
+      fetch("/amizade/recusar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          convite_id: conviteId
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert("Convite recusado com sucesso!");
+        } else {
+          alert(data.message);
+        }
+      });
+    });
+  });
+
+  // Lógica para o botão remover (mesma rota de recusar)
+  document.querySelectorAll(".btn-remover").forEach(button => {
+    button.addEventListener("click", function() {
+      const amizadeId = this.closest(".botoes-amizade").getAttribute("data-id");
+
+      // Envia para o backend para remover o amigo
+      fetch("/amizade/recusar", {  // Reutilizando a rota de recusar
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          convite_id: amizadeId
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          alert("Amigo removido com sucesso!");
+          // Você pode adicionar lógica para remover o item da tela, por exemplo
+        } else {
+          alert(data.message);
+        }
+      });
+    });
+  });
+});
 
 
 
 
-
-  

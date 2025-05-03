@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='Style_Home.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='Style_Classification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style_notification.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='Images/Icon.png') }}" type="png"> 
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <title>Easy Recycle</title>
    
 </head>
@@ -55,93 +57,53 @@
                 <path d="M18.7867 17.2857H20.7867V19.1905H0.786743V17.2857H2.78674V10.619C2.78674 8.59835 3.6296 6.66042 5.12989 5.23157C6.63018 3.80272 8.66501 3 10.7867 3C12.9085 3 14.9433 3.80272 16.4436 5.23157C17.9439 6.66042 18.7867 8.59835 18.7867 10.619V17.2857ZM7.78674 21.0952H13.7867V23H7.78674V21.0952Z" fill="#2E2D36"/>
                 <circle cx="17" cy="4" r="4" fill="#EE4B4B"/>
               </svg>
-              <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profiles/' ~ user.id ~ '.jpg') }}" alt="Perfil">            
+              <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profiles/' ~ user.id ~ '.jpg') }}" alt="Perfil">
+     
         </div>
 
         <aside class="sidebar_direito" id="sidebar_direito">
             <nav>
                 <p class="topicos">Meu perfil</p>
             <ul>
-                <li><a href="/home">Minhas informações</a></li>
-                <li><a href="/home">Alterar foto de perfil</a></li>
+                <li><a href="/MyInfo">Minhas informações</a></li>
             </ul>
             <hr>
             <p class="topicos">Outros</p>
             <ul>
-                <li><a href="/Points">Desconectar</a></li>
+                <li><a href="/desconect">Desconectar</a></li>
             </ul>
             </nav>
         </aside>
     </header>
     <main>
-        {% if amigos %}
-        <div class="toggle-Podio">
-            <h2 onclick="togglepodio()">
-                Classificação
-                <span id="seta3">&#9650;</span> <!-- seta para cima -->
-            </h2>
-        </div>
-    <div id="lista-podio" class="container-amigos">    
-        <div class="podio" id="podio">
-            {% for amigo in amigos[:3] %}
-            <div class="coluna {% if amigo.ranking == 1 %}centro{% elif amigo.ranking == 2 %}esquerda{% elif amigo.ranking == 3 %}direita{% endif %}">
-                <p class="nome-podio">{{ amigo.name }}</p>
-                <img class="foto-perfil-podio" src="{{ url_for('static', filename='Images/Profiles/' ~ amigo.id ~ '.jpg') }}" alt="Foto"> 
-                <div class="barra {% if amigo.ranking == 1 %}ouro_col{% elif amigo.ranking == 2 %}prata_col{% elif amigo.ranking == 3 %}bronze_col{% endif %}" id="barra-{{ amigo.id }}">
-                    <span class="pontos">{{ amigo.points }}</span>
-                </div>
+        <h1>Suas Notificações</h1>
+        {% for notification in notifications %}
+        <div class="notification {{ notification.type_notification }}" data-id="{{ notification.id }}" data-read="{{ notification.is_read }}">
+          
+          {% if notification.type_notification == 'Convite de amizade' %}
+            <div class="profile-pic">
+              <img src="{{ url_for('static', filename='Images/Profiles/' ~ notification.user_id ~ '.jpg') }}"
+                   alt="Foto de perfil" width="40" height="40" style="border-radius: 50%;">
             </div>
-            {% endfor %}
+          {% endif %}
+      
+          <div class="notification-content">
+            <p class="message">{{ notification.message }}</p>
+          </div>
+      
+          <div class="notification-actions">
+            <div class="timestamp">
+              {{ notification.date_notification.strftime('%d/%m/%Y %H:%M') }}
+            </div>
+            <button class="mark-as-read">Marcar como lida</button>
+          </div>
         </div>
-        </div>
-        {% endif %}
-        <hr>
-        {% if amigos %}
+      {% endfor %}
 
-<div class="toggle-Amigos">
-    <h2 onclick="toggleAmigos()">
-        Pontuação Geral
-        <span id="seta2">&#9650;</span> <!-- seta para cima -->
-    </h2>
-</div>
-
-<div id="lista-amigos" class="container-amigos">
-    {% for amigo in amigos %}
-      <div class="data-container-friend" data-id="{{ amigo.id }}">
         
-        <!-- Ranking grande à esquerda -->
-        <div class="ranking 
-  {% if amigo.ranking == 1 %}
-    ouro
-  {% elif amigo.ranking == 2 %}
-    prata
-  {% elif amigo.ranking == 3 %}
-    bronze
-  {% else %}
-    cinza
-  {% endif %}">
-  #{{ amigo.ranking }}
-</div>
-  
-        <!-- Perfil ao centro -->
-        <div class="perfil-info">
-          <img src="{{ url_for('static', filename='Images/Profiles/' ~ amigo.id ~ '.jpg') }}" alt="Foto de perfil">
-          <p class="nome">{{ amigo.name }}</p>
-        </div>
-  
-        <!-- Pontuação à direita -->
-        <div class="points">
-          {{ amigo.points }}
-        </div>
-  
-      </div>
-    {% endfor %}
-  </div>
-  
-{% endif %}
+
     </main>
-    <script src="{{ url_for('static', filename='Scripts/Script_home.js') }}"></script>
-    <script src="{{ url_for('static', filename='Scripts/Script_Classification.js') }}"></script>
-    
+    <script src="{{ url_for('static', filename='Scripts/Script_Home.js') }}"></script>
+    <script src="{{ url_for('static', filename='Scripts/Script_Notification.js') }}"></script>
 </body>
 </html>

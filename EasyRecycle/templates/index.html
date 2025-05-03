@@ -68,5 +68,17 @@
     </div>    
   </div>
   <script src="{{ url_for('static', filename='Scripts/Script_Cadastro.js') }}"></script>
+  <script>
+    window.onload = function() {
+      sessionStorage.clear();  // limpa qualquer dado ainda salvo
+      localStorage.clear();
+  
+      // Remove o histórico anterior
+      history.pushState(null, null, location.href);
+      window.onpopstate = function () {
+        history.pushState(null, null, location.href);
+      };
+    };
+  </script>
 </body>
 </html>

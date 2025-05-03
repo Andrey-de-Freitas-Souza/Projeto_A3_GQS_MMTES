@@ -190,3 +190,44 @@ fetch('/get-collection-points')
   document.querySelectorAll('.category-header').forEach(header => {
     header.style.backgroundColor = header.getAttribute('data-color');
   });
+
+
+  sessionStorage.clear();
+  localStorage.clear();
+
+  // Impede voltar para páginas anteriores
+  window.history.pushState(null, "", window.location.href);
+  window.onpopstate = function () {
+    window.history.pushState(null, "", window.location.href);
+  };
+
+  // Força recarregamento se o usuário tentar voltar
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted || window.performance.getEntriesByType("navigation")[0].type === "back_forward") {
+      location.reload(); // força recarregar para evitar acesso à página protegida via cache
+    }
+  });
+
+  
+  function fetchUserId() {
+    // Faz uma requisição GET para obter o id do usuário
+    fetch('/get_user_id')
+        .then(response => response.json())
+        .then(data => {
+            if (data.user_id) {
+                console.log("ID do usuário:", data.user_id);
+                // Aqui você pode manipular a página com o ID, se necessário
+                // Exemplo: Exibir o ID em um elemento HTML
+                document.getElementById('user-id').textContent = data.user_id;
+            } else {
+                console.log("Erro ao obter o ID do usuário");
+            }
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+        });
+}
+
+// Chama a função ao carregar a página
+window.onload = fetchUserId;
+

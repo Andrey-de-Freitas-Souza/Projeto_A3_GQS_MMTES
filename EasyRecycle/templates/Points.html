@@ -56,7 +56,7 @@
                 <path d="M18.7867 17.2857H20.7867V19.1905H0.786743V17.2857H2.78674V10.619C2.78674 8.59835 3.6296 6.66042 5.12989 5.23157C6.63018 3.80272 8.66501 3 10.7867 3C12.9085 3 14.9433 3.80272 16.4436 5.23157C17.9439 6.66042 18.7867 8.59835 18.7867 10.619V17.2857ZM7.78674 21.0952H13.7867V23H7.78674V21.0952Z" fill="#2E2D36"/>
                 <circle cx="17" cy="4" r="4" fill="#EE4B4B"/>
               </svg>
-              <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profile.jpg') }}" alt="Perfil">            
+              <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profiles/' ~ user.id ~ '.jpg') }}" alt="Perfil">            
         </div>
 
         <aside class="sidebar_direito" id="sidebar_direito">
