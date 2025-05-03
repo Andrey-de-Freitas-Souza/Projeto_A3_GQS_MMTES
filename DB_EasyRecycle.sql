@@ -15,6 +15,11 @@ CREATE TABLE Users (
     registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,         	-- Data de cadastro, padrão para o momento atual
     last_login_date DATETIME                                     	-- Data do último login
 );
+update Users set points = 200 where id = 4;
+update Users set points = 150 where id = 2;
+update Users set points = 175 where id = 3;
+update Users set points = 0 where id = 1;
+
 
 CREATE TABLE collection_point (
     id INT AUTO_INCREMENT PRIMARY KEY,                         		
@@ -73,6 +78,8 @@ CREATE TABLE recycle (
     date_recycle DATETIME
 );
 
+INSERT INTO recycle (user_id, category_id, weight_item, point_id, date_recycle)  VALUES(4,8,500,2,CURRENT_TIMESTAMP);
+
 CREATE TABLE user_friendship (
     id INT AUTO_INCREMENT PRIMARY KEY,
     requesting_user_id INT,
@@ -83,8 +90,9 @@ CREATE TABLE user_friendship (
     FOREIGN KEY (requesting_user_id) REFERENCES users(id),
     FOREIGN KEY (approver_user_id) REFERENCES users(id)
 );
-
-
+insert into user_friendship (requesting_user_id,approver_user_id,status,date_friend) values (4,3,"Solicitado",CURRENT_TIMESTAMP);
+insert into user_friendship (requesting_user_id,approver_user_id,status,date_friend) values (5,4,"Solicitado",CURRENT_TIMESTAMP);
+select * from user_friendship;
 CREATE TABLE user_notification (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -94,7 +102,6 @@ CREATE TABLE user_notification (
     date_notification DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
-
 
 select * from Users;
 select * from collection_point;
@@ -204,3 +211,55 @@ FROM users u
 JOIN user_friendship uf ON (u.id = uf.requesting_user_id)
 WHERE uf.approver_user_id = 4  -- Troque 1 pelo id de um usuário que você quer testar
 AND uf.status = 'Solicitado';
+
+
+SELECT u.id, u.name, u.points
+        FROM user_friendship uf
+        JOIN users u ON (
+            (uf.requesting_user_id = u.id AND uf.approver_user_id = 4) OR
+            (uf.approver_user_id = u.id AND uf.requesting_user_id = 4)
+        )
+        WHERE uf.status = 'Aprovado';
+        
+SELECT 
+    u.id, 
+    u.name, 
+    u.points,
+    ROW_NUMBER() OVER (ORDER BY u.points DESC) AS ranking
+FROM user_friendship uf
+JOIN users u ON (
+    (uf.requesting_user_id = u.id AND uf.approver_user_id = 4) OR
+    (uf.approver_user_id = u.id AND uf.requesting_user_id = 4)
+)
+WHERE uf.status = 'Aprovado'
+ORDER BY u.points DESC;
+
+SELECT 
+    all_users.id, 
+    all_users.name, 
+    all_users.points,
+    ROW_NUMBER() OVER (ORDER BY all_users.points DESC) AS ranking
+FROM (
+    -- Amigos aprovados
+    SELECT 
+        u.id, 
+        u.name, 
+        u.points
+    FROM user_friendship uf
+    JOIN users u ON (
+        (uf.requesting_user_id = u.id AND uf.approver_user_id = 4) OR
+        (uf.approver_user_id = u.id AND uf.requesting_user_id = 4)
+    )
+    WHERE uf.status = 'Aprovado'
+
+    UNION
+
+    -- Usuário logado
+    SELECT 
+        u.id, 
+        u.name, 
+        u.points
+    FROM users u
+    WHERE u.id = 4
+) AS all_users
+ORDER BY all_users.points DESC;
