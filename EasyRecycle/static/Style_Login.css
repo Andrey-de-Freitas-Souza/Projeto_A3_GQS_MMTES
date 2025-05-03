@@ -126,3 +126,59 @@ select{
   padding: 5px;
   margin-left: 10px; /* Espaçamento entre o select e o input */
 }
+
+/* Container geral de input */
+.input-group {
+  display: flex;
+  flex-direction: column; /* Coloca label em cima do input */
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+/* Container para os campos lado a lado */
+.input-row {
+  display: flex;
+  gap: 20px; /* Espaçamento entre os campos */
+  width: 100%;
+}
+
+/* Garantir que as labels fiquem acima dos campos */
+#form-container label {
+  display: block; /* Garante que a label ocupe a largura do contêiner */
+  margin-bottom: 5px; /* Espaçamento entre a label e o campo de input */
+  font-size: 14px;
+}
+
+
+/* Garantir que os campos de Nome, Sobrenome, Data e CEP fiquem lado a lado */
+#nome, #sobrenome, #data, #cep {
+  width: 48%; /* Cada campo ocupará 48% da largura */
+}
+
+/* Estilo para os inputs */
+#form-container input,
+#form-container select {
+  width: 100%; /* Garante que os campos ocupem toda a largura */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Para o telefone */
+.input-container {
+  display: flex;
+  align-items: center;
+}
+
+#ddi {
+  width: 120px; /* Ajusta o tamanho do campo de DDI */
+  padding: 5px;
+}
+
+#telefone {
+  flex-grow: 1; /* Faz com que o campo de telefone ocupe o restante do espaço */
+  padding: 5px;
+  margin-left: 10px; /* Espaçamento entre o select e o input */
+}
+

@@ -1,174 +1,337 @@
-const formContainer = document.getElementById('form-container');
-const loginForm = document.getElementById('login-form');
-const cadastroForm = document.getElementById('cadastro-form');
-const cadastreSe = document.getElementById('cadastre-se');
-const voltarLogin = document.getElementById('voltar-login');
+document.addEventListener('DOMContentLoaded', function () {
+  const formContainer = document.getElementById('form-container');
+  const loginForm = document.getElementById('login-form');
+  const cadastroForm = document.getElementById('cadastro-form');
+  const cadastreSe = document.getElementById('cadastre-se');
+  const voltarLogin = document.getElementById('voltar-login');
+  const btnCadastrar = document.getElementById('btnCadastrar');
+  const btnLogin = document.getElementById('btnLogin');
+  const telefoneInput = document.getElementById('telefone');
+  const cepInput = document.getElementById('cep');
+  const nomeInput = document.getElementById('name');
+  const sobrenomeInput = document.getElementById('sobrenome');
+  const emailInput = document.getElementById('email');
+  const senhaInput = document.getElementById('senha');
+  const confirmacaoSenhaInput = document.getElementById('confirmacao_senha');
 
-cadastreSe.addEventListener('click', () => {
-  // Move a caixa para o centro
-  formContainer.style.right = '50%';
-  formContainer.style.transform = 'translate(50%, -50%)';
-  formContainer.style.borderRadius = '10px'
-  formContainer.style.width = '50%';
-
-  // Alterna o conteúdo
-  loginForm.classList.remove('active');
-  cadastroForm.classList.add('active');
-});
-
-voltarLogin.addEventListener('click', () => {
-  // Volta a caixa para a direita
-  formContainer.style.right = '0';
-  formContainer.style.transform = 'translateY(-50%)';
-  formContainer.style.borderRadius = '10px 0px 0px 10px';
-  formContainer.style.width = '40%';
-
-  // Alterna o conteúdo
-  cadastroForm.classList.remove('active');
-  loginForm.classList.add('active');
-});
-
-// ---- Scripts de máscaras Telefone e CEP ----
-// Função para aplicar a máscara de telefone conforme o DDI selecionado
-function mascaraTelefone(event) {
-    let input = event.target;
-    let valor = input.value;
-  
-    // Obter o DDI selecionado
-    let ddi = document.getElementById('ddi').value;
-  
-    // Remove tudo que não é número
-    valor = valor.replace(/\D/g, '');
-  
-    // Aplica a máscara dependendo do DDI selecionado
-    if (ddi === '+55') { // Brasil
-      if (valor.length <= 2) {
-        valor = '(' + valor;
-      } else if (valor.length <= 6) {
-        valor = '(' + valor.slice(0, 2) + ') ' + valor.slice(2);
-      } else if (valor.length <= 10) {
-        valor = '(' + valor.slice(0, 2) + ') ' + valor.slice(2, 7) + '-' + valor.slice(7);
-      } else {
-        valor = '(' + valor.slice(0, 2) + ') ' + valor.slice(2, 7) + '-' + valor.slice(7, 11);
-      }
-    } else if (ddi === '+1') { // Estados Unidos
-      if (valor.length <= 3) {
-        valor = '(' + valor;
-      } else if (valor.length <= 6) {
-        valor = '(' + valor.slice(0, 3) + ') ' + valor.slice(3);
-      } else {
-        valor = '(' + valor.slice(0, 3) + ') ' + valor.slice(3, 6) + '-' + valor.slice(6);
-      }
-    } else if (ddi === '+44') { // Reino Unido
-      if (valor.length <= 4) {
-        valor = valor.slice(0, 4);
-      } else if (valor.length <= 7) {
-        valor = valor.slice(0, 4) + ' ' + valor.slice(4);
-      } else {
-        valor = valor.slice(0, 4) + ' ' + valor.slice(4, 7) + '-' + valor.slice(7);
-      }
-    }
-  
-    // Atualiza o valor do campo
-    input.value = valor;
+  // Impedindo a digitação de números e caracteres especiais nos campos nome e sobrenome
+  if (nomeInput) {
+    nomeInput.addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s-]/g, '');
+    });
   }
-  
 
-// Função para aplicar a máscara de CEP
-function mascaraCep(event) {
-  let input = event.target;
-  input.value = input.value
-    .replace(/\D/g, '') // Remove tudo que não é número
-    .replace(/^(\d{5})(\d)/, '$1-$2') // Adiciona o hífen ao CEP
-    .slice(0, 9); // Limita o número de caracteres a 9
-}
-
-function mascaraData(event) {
-    let input = event.target;
-    let valor = input.value;
-  
-    // Remove tudo que não for número
-    valor = valor.replace(/\D/g, '');
-  
-    // Aplica a máscara de data no formato dd/mm/yyyy
-    if (valor.length <= 2) {
-      valor = valor.slice(0, 2); // Dia
-    } else if (valor.length <= 4) {
-      valor = valor.slice(0, 2) + '/' + valor.slice(2, 4); // Mês
-    } else if (valor.length <= 8) {
-      valor = valor.slice(0, 2) + '/' + valor.slice(2, 4) + '/' + valor.slice(4, 8); // Ano
-    } else {
-      valor = valor.slice(0, 10); // Limita a 10 caracteres
-    }
-  
-    // Atualiza o valor do campo
-    input.value = valor;
+  if (sobrenomeInput) {
+    sobrenomeInput.addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s-]/g, '');
+    });
   }
-  
-  // Adicionando o evento de 'input' aos campos de telefone e CEP
-  document.getElementById('telefone').addEventListener('input', mascaraTelefone);
-  document.getElementById('cep').addEventListener('input', mascaraCep);
-  document.getElementById('data').addEventListener('input', mascaraData);
 
-  $(document).ready(function(){
-    // Obter o ano atual
-    var anoAtual = new Date().getFullYear();
-  
-    // Inicializar o Datepicker com o limite de ano atual
-    $("#data").datepicker({
-      dateFormat: "dd/mm/yy",  // Formato da data
-      changeMonth: true,        // Habilita a navegação por mês
-      changeYear: true,         // Habilita a navegação por ano
-      yearRange: "1900:" + anoAtual,   // Define o intervalo de anos de 1900 até o ano atual
-      showButtonPanel: true,    // Adiciona o painel de botões (se necessário)
-      maxDate: new Date()       // Impede que o usuário selecione uma data futura
+  // Validação de e-mail
+  if (emailInput) {
+    emailInput.addEventListener('input', function (e) {
+      const erroEmail = document.getElementById('erro-email');
+      const emailValue = e.target.value;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+      if (!emailRegex.test(emailValue)) {
+        erroEmail.style.display = 'inline';
+        erroEmail.textContent = 'Por favor, insira um e-mail válido.';
+      } else {
+        erroEmail.style.display = 'none';
+      }
+    });
+  }
+
+  // Validação de telefone (formato (99) 99999-9999)
+  if (telefoneInput) {
+    telefoneInput.addEventListener('input', function (e) {
+      let telefoneValue = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+
+      // Aplica a máscara enquanto o usuário digita
+      if (telefoneValue.length <= 2) {
+        telefoneValue = '(' + telefoneValue;
+      } else if (telefoneValue.length <= 6) {
+        telefoneValue = '(' + telefoneValue.slice(0, 2) + ') ' + telefoneValue.slice(2);
+      } else if (telefoneValue.length <= 10) {
+        telefoneValue = '(' + telefoneValue.slice(0, 2) + ') ' + telefoneValue.slice(2, 7) + '-' + telefoneValue.slice(7);
+      } else {
+        telefoneValue = '(' + telefoneValue.slice(0, 2) + ') ' + telefoneValue.slice(2, 7) + '-' + telefoneValue.slice(7, 11);
+      }
+
+      e.target.value = telefoneValue;
+    });
+  }
+
+  // Validação de senha (mínimo de 4 caracteres)
+  if (senhaInput) {
+    senhaInput.addEventListener('input', function (e) {
+      const erroSenha = document.getElementById('erro-senha');
+      const senhaValue = e.target.value;
+      console.log(senhaValue)
+      if (senhaValue.length <= 4) {
+        erroSenha.style.display = 'inline';
+        erroSenha.textContent = 'A senha deve ter no mínimo 4 caracteres.';
+      } else {
+        erroSenha.style.display = 'none';
+      }
+    });
+  }
+
+  // Validação de confirmação de senha
+  if (confirmacaoSenhaInput) {
+    confirmacaoSenhaInput.addEventListener('input', function () {
+      const erroConfirmacaoSenha = document.getElementById('erro-confirmacao-senha');
+      const senhaValue = senhaInput.value;
+      const confirmacaoSenhaValue = confirmacaoSenhaInput.value;
+
+      if (confirmacaoSenhaValue !== senhaValue) {
+        erroConfirmacaoSenha.style.display = 'inline';
+        erroConfirmacaoSenha.textContent = 'As senhas não correspondem.';
+      } else {
+        erroConfirmacaoSenha.style.display = 'none';
+      }
+    });
+  }
+
+  if (cadastreSe) {
+    cadastreSe.addEventListener('click', () => {
+      formContainer.style.right = '50%';
+      formContainer.style.transform = 'translate(50%, -50%)';
+      formContainer.style.borderRadius = '10px';
+      formContainer.style.width = '50%';
+
+      loginForm.classList.remove('active');
+      cadastroForm.classList.add('active');
+    });
+  }
+
+  if (voltarLogin) {
+    voltarLogin.addEventListener('click', () => {
+      formContainer.style.right = '0';
+      formContainer.style.transform = 'translateY(-50%)';
+      formContainer.style.borderRadius = '10px 0px 0px 10px';
+      formContainer.style.width = '40%';
+
+      cadastroForm.classList.remove('active');
+      loginForm.classList.add('active');
+    });
+  }
+
+  function mascaraCep(event) {
+    let input = event.target;
+    input.value = input.value.replace(/\D/g, '').replace(/^(\d{5})(\d)/, '$1-$2').slice(0, 9);
+  }
+
+  if (cepInput) cepInput.addEventListener('input', mascaraCep);
+
+  // Máscara de data
+  $(function () {
+    const hoje = new Date();
+    const anoAtual = hoje.getFullYear();
+
+    $('#data').datepicker({
+      dateFormat: 'dd/mm/yy',
+      changeMonth: true,
+      changeYear: true,
+      yearRange: '1910:' + anoAtual,
+      showButtonPanel: true,
+      maxDate: hoje
+    });
+
+    $('#data').on('focus click', function () {
+      $(this).datepicker('show');
     });
   });
 
-  document.getElementById('btnCadastrar').addEventListener('click', function(e) {
-    e.preventDefault();
+  if (btnCadastrar) {
+    btnCadastrar.addEventListener('click', function (e) {
+      e.preventDefault();
 
-    const form = document.getElementById('cadastro-form');
-    const formData = new FormData(form);
+      const form = document.getElementById('cadastro-form');
+      const formData = new FormData(form);
 
-    fetch('/register', {
+      function tratarTexto(texto) {
+        return texto.trim()
+          .replace(/\s+/g, ' ')
+          .replace(/[^a-zA-ZÀ-ÿ\s-]/g, '')
+          .toLowerCase()
+          .split(' ')
+          .map(p => p.charAt(0).toUpperCase() + p.slice(1))
+          .join(' ');
+      }
+
+      const nome = tratarTexto(formData.get('name') || '');
+      const sobrenome = tratarTexto(formData.get('sobrenome') || '');
+      const nomeCompleto = `${nome} ${sobrenome}`.trim();
+
+      const erroNome = document.getElementById('erro-nome');
+      const erroCep = document.getElementById('erro-cep');
+      const erroEmail = document.getElementById('erro-email');
+      const erroSenha = document.getElementById('erro-senha');
+      const erroData = document.getElementById('erro-data');
+      const erroTelefone = document.getElementById('erro-telefone');
+      const erroConfirmacaoSenha = document.getElementById('erro-confirmacao-senha');
+
+      // Ocultar todos os erros ao iniciar
+      [erroNome, erroCep, erroEmail, erroSenha, erroData, erroTelefone, erroConfirmacaoSenha].forEach(erro => {
+        if (erro) erro.style.display = 'none';
+      });
+
+      let valid = true;
+
+      // Validação do nome completo
+      if (nomeCompleto.length > 100) {
+        erroNome.style.display = 'inline';
+        erroNome.textContent = 'O nome completo não pode ter mais que 100 caracteres.';
+        valid = false;
+      }
+
+      const cep = (formData.get('address') || '').replace(/\D/g, '');
+      if (cep.length !== 8) {
+        erroCep.style.display = 'inline';
+        erroCep.textContent = 'Preencha o CEP completo.';
+        valid = false;
+      }
+
+      // Validação do nome e sobrenome
+      if ((nome.length + sobrenome.length) < 7) {
+        erroNome.style.display = 'inline';
+        erroNome.textContent = 'Nome e sobrenome devem ter no mínimo 7 caracteres no total.';
+        valid = false;
+      }
+
+      // Validação da data
+      const data = formData.get('birth_date') || '';
+      if (!data.trim()) {
+        erroData.style.display = 'inline';
+        erroData.textContent = 'Adicione uma data';
+        valid = false;
+      }
+
+      // Validação de e-mail
+      const email = formData.get('email') || '';
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email)) {
+        erroEmail.style.display = 'inline';
+        erroEmail.textContent = 'Por favor, insira um e-mail válido.';
+        valid = false;
+      }
+
+      // Verificando se o e-mail já está cadastrado
+      fetch(`/check-email?email=${email}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.emailExists) {
+            erroEmail.style.display = 'inline';
+            erroEmail.textContent = 'Este e-mail já está cadastrado.';
+            valid = false;
+          }
+
+          if (!valid) return;
+
+          formData.set('name', nomeCompleto);
+
+          fetch('/register', {
+            method: 'POST',
+            body: formData,
+          })
+            .then(async response => {
+              const data = await response.json();
+          
+              if (response.ok) {
+                // Cadastro bem-sucedido
+                alert('Cadastro: ' + data.message);
+                window.location.href = '/home';
+              } else {
+                // Erro tratado pelo backend (como e-mail já existente)
+                const erroCadastro = document.getElementById('erro-cadastro');
+                erroCadastro.style.display = 'inline';
+                erroCadastro.textContent = 'Erro: ' + (data.message || 'Erro no cadastro.');
+              }
+            })
+            .catch(error => {
+              // Erro inesperado (como falta de conexão)
+              console.error('Erro:', error);
+              const erroCadastro = document.getElementById('erro-cadastro');
+              erroCadastro.style.display = 'inline';
+              erroCadastro.textContent = 'Erro: Ocorreu um erro inesperado. Tente novamente mais tarde.';
+            });
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+        });
+    });
+  }
+
+  if (btnLogin) {
+    btnLogin.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const form = document.getElementById('login-form');
+      const formData = new FormData(form);
+
+      fetch('/login', {
         method: 'POST',
         body: formData,
-    })
-    .then(response => response.json())
-    .then(data => console.log('Cadastro feito com sucesso:', data))
-    .catch((error) => console.error('Erro:', error));
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === "Login bem-sucedido") {
+            window.location.href = '/home';
+          } else {
+          }
+        })
+        .catch(error => {
+          console.error('Erro:', error);
+        });
+    });
+  }
 });
+document.getElementById('btnLogin').addEventListener('click', async function () {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const msg = document.getElementById('login-msg');
+  msg.style.display = 'none';
 
-document.getElementById('btnLogin').addEventListener('click', function(e) {
-  e.preventDefault();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const form = document.getElementById('login-form');
-  const formData = new FormData(form);
+  // Validações
+  if (!emailRegex.test(email)) {
+      msg.innerText = 'Por favor, insira um e-mail válido.';
+      msg.style.display = 'block';
+      return;
+  }
 
-  fetch('/login', {
-    method: 'POST',
-    body: formData,
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Resposta do servidor:', data);
-    if (data.message === "Login bem-sucedido") {
-      // Salva as informações do usuário no sessionStorage
-      sessionStorage.setItem('user_info', JSON.stringify(data.user_info));
+  if (password.length <= 3) {
+      msg.innerText = 'A senha deve ter pelo menos 6 caracteres.';
+      msg.style.display = 'block';
+      return;
+  }
 
-      // Se o login foi sucesso, redireciona para a página inicial
-      window.location.href = '/home';  // <-- Coloque aqui a rota da sua página home
-    } else {
-      alert('Email ou senha inválidos!');
-    }
-  })
-  .catch((error) => console.error('Erro:', error));
+  try {
+      const response = await fetch('http://127.0.0.1:5000/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: new URLSearchParams({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.status === 200) {
+          // Sucesso → redireciona ou mostra mensagem
+          console.log('Login bem-sucedido');
+          window.location.href = '/home';  // exemplo de redirecionamento
+      } else {
+          msg.innerText = data.message || data.error || 'Usuário ou senha inválidos.';
+          msg.style.display = 'block';
+      }
+
+  } catch (error) {
+      console.error('Erro:', error);
+      msg.innerText = 'Erro ao conectar com o servidor.';
+      msg.style.display = 'block';
+  }
 });
-
-  
-
-
-
-
-

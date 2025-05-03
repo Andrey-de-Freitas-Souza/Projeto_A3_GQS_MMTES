@@ -7,7 +7,7 @@ CREATE TABLE Users (
     `name` VARCHAR(200) NOT NULL,                                 	-- Nome do usuário, não pode ser nulo
     email VARCHAR(255) NOT NULL UNIQUE,                           	-- Email único, tamanho padrão para emails
     `password` VARCHAR(255) NOT NULL,                          		-- Senha criptografada, pode ter tamanho variável
-    phone VARCHAR(15),                                          	-- Número de telefone, considerando o formato internacional
+	phone VARCHAR(20),                                          	-- Número de telefone, considerando o formato internacional
     address VARCHAR(9),                                              -- CEP armazenado como string
     points INT DEFAULT 0,                                         	-- Pontuação, padrão 0
     `status` VARCHAR(20) DEFAULT 'active',                    		-- Status do usuário (ativo ou inativo), padrão 'active'
@@ -15,6 +15,11 @@ CREATE TABLE Users (
     registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,         	-- Data de cadastro, padrão para o momento atual
     last_login_date DATETIME                                     	-- Data do último login
 );
+ALTER TABLE Users ADD COLUMN phone_new VARCHAR(20);
+UPDATE Users SET phone_new = phone;
+ALTER TABLE Users DROP COLUMN phone;
+ALTER TABLE Users CHANGE phone_new phone VARCHAR(20);
+
 update Users set points = 200 where id = 4;
 update Users set points = 150 where id = 2;
 update Users set points = 175 where id = 3;

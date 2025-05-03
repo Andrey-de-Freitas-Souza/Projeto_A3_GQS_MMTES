@@ -1,7 +1,7 @@
 from datetime import datetime
-from ConnectionDB import get_db_connection  # Certifique-se de que esse módulo esteja no lugar certo
 import bcrypt
-from flask import session
+from ConnectionDB import get_db_connection  # Certifique-se de que esse módulo esteja correto
+from flask import jsonify, session
 
 class User:
     def __init__(self, id=None, name=None, email=None, password=None, phone=None, address=None,
@@ -20,95 +20,106 @@ class User:
 
     def cadastro(self):
         """Método para cadastrar o usuário no banco de dados"""
-        # Verificar se a senha contém apenas caracteres UTF-8
-        if not all(ord(c) < 128 for c in self.password):
-            raise ValueError("A senha contém caracteres não permitidos")
+        try:
+            # Verificar se a senha contém apenas caracteres UTF-8
+            if not all(ord(c) < 128 for c in self.password):
+                raise ValueError("A senha contém caracteres não permitidos")
 
-        
-        # Conectar ao banco de dados
-        conn = get_db_connection()  # Alterado para chamar a função externa
-        cursor = conn.cursor(dictionary=True)
+            # Conectar ao banco de dados
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
 
-        # Verificar se o email já existe no banco de dados
-        cursor.execute("SELECT * FROM users WHERE email = %s", (self.email,))
-        user = cursor.fetchone()
-        
-        if user:
-            raise ValueError("O email já está em uso")
+            # Verificar se o email já existe no banco de dados
+            cursor.execute("SELECT * FROM users WHERE email = %s", (self.email,))
+            user = cursor.fetchone()
+            
+            if user:
+                raise ValueError("O email já está em uso")
 
-        # Criptografar a senha
-        hashed_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
+            # Criptografar a senha
+            hashed_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-        # Inserir o usuário no banco de dados
-        cursor.execute(
-            "INSERT INTO users (name, email, password, phone,birth_date, address, points, registration_date, status, last_login_date) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            (self.name, self.email, hashed_password, self.phone, self.birth_date, self.address, self.points, 
-             self.registration_date, self.status, self.last_login_date)
-        )
-        conn.commit()
-
-        cursor.close()
-        conn.close()
-
-        return {"message": "Usuário cadastrado com sucesso!"}
-
-    def to_dict(self):
-        return {
-            "id" : self.id,
-            "name" : self.name,
-            "email" : self.email,
-            "password" : self.password,
-            "phone" : self.phone,
-            "address" : self.address,
-            "points" : self.points,
-            "registration_date" : self.registration_date,
-            "status" : self.status,
-            "last_login_date" : self.last_login_date,
-            "birth_date" : self.birth_date
-        }
-    @staticmethod
-    def login(email, password):
-        """Método para login do usuário e retornar um objeto com as informações"""
-        conn = get_db_connection()  # Conecta ao banco de dados
-        cursor = conn.cursor(dictionary=True)
-        
-        cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
-        user = cursor.fetchone()
-
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
-            # Atualizar a data de último login
-            last_login_date = datetime.now()
-            cursor.execute("UPDATE users SET last_login_date = %s WHERE email = %s", 
-                        (last_login_date, email))
+            # Inserir o usuário no banco de dados
+            cursor.execute(
+                "INSERT INTO users (name, email, password, phone, birth_date, address, points, registration_date, status, last_login_date) "
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                (self.name, self.email, hashed_password, self.phone, self.birth_date, self.address, self.points, 
+                 self.registration_date, self.status, self.last_login_date)
+            )
             conn.commit()
 
-            # Fechar o cursor e a conexão com o banco de dados
             cursor.close()
             conn.close()
 
-            # Criar um objeto Users
-            user_obj = User(
-                id=user['id'],
-                name=user['name'],
-                email=user['email'],
-                password=user['password'],
-                phone=user['phone'],
-                address=user['address'],
-                points=user['points'],
-                registration_date=user['registration_date'],
-                status=user['status'],
-                last_login_date=last_login_date,
-                birth_date=user['birth_date']
-            )
+            return {"message": "Usuário cadastrado com sucesso!"}
 
-            # Armazenar as informações do usuário na sessão
-            session['user_info'] = user_obj.to_dict()
+        except Exception as e:
+            print(f"Erro no cadastro: {e}")
+            return {"message": f"Erro: {e}"}
 
-            # Retornar a resposta
-            return {"message": "Login bem-sucedido", "user": user_obj.to_dict()}
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "password": self.password,
+            "phone": self.phone,
+            "address": self.address,
+            "points": self.points,
+            "registration_date": self.registration_date,
+            "status": self.status,
+            "last_login_date": self.last_login_date,
+            "birth_date": self.birth_date
+        }
 
-        cursor.close()
-        conn.close()
-        return {"message": "Credenciais inválidas"}
+    @staticmethod
+    def login(email, password):
+        """Método para login do usuário e retornar um objeto com as informações"""
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
 
+        try:
+            cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+            user = cursor.fetchone()
+
+            if user:
+                hashed_password = user['password']
+                if bcrypt.checkpw(password.encode('utf-8'), hashed_password.encode('utf-8')):
+                    # Atualizar a data de último login
+                    last_login_date = datetime.now()
+                    cursor.execute("UPDATE users SET last_login_date = %s WHERE email = %s", 
+                                (last_login_date, email))
+                    conn.commit()
+
+                    # Criar objeto User
+                    user_obj = User(
+                        id=user['id'],
+                        name=user['name'],
+                        email=user['email'],
+                        password=hashed_password,
+                        phone=user['phone'],
+                        address=user['address'],
+                        points=user['points'],
+                        registration_date=user['registration_date'],
+                        status=user['status'],
+                        last_login_date=last_login_date,
+                        birth_date=user['birth_date']
+                    )
+
+                    # Sessão
+                    session['user_info'] = user_obj.to_dict()
+
+                    return {
+                        "message": "Login bem-sucedido",
+                        "user": user_obj.to_dict()
+                    }
+
+            return {"message": "Credenciais inválidas"}
+
+        except Exception as e:
+            print(f"Erro no login: {e}")
+            return {"message": "Erro no servidor"}
+
+        finally:
+            cursor.close()
+            conn.close()

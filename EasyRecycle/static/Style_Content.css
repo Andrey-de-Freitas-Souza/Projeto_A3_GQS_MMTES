@@ -1,0 +1,112 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+/* Main container styling */
+main {
+    margin-top: 60px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Titles */
+h1, h2 {
+    color: #2c3e50;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Lists */
+ul {
+    list-style-type: square;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+li {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+/* Links */
+a {
+    color: #2980b9;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Video Gallery */
+.video-gallery iframe {
+    width: 100%;
+    max-width: 600px;
+    height: 315px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.video-gallery p {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+/* Image Gallery */
+.image-gallery {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.image-gallery img {
+    max-width: 32%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.image-gallery img:hover {
+    transform: scale(1.05);
+}
+
+/* Horizontal Rule */
+hr {
+    border: 1px solid #ecf0f1;
+    margin: 30px 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .video-gallery iframe {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .image-gallery {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .image-gallery img {
+        max-width: 90%;
+        margin-bottom: 20px;
+    }
+}

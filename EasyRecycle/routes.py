@@ -57,10 +57,6 @@ def home():
     
     dados = cursor.fetchall()
 
-    # Formatar a data no formato 'dd/mm/yyyy'
-    for linha in dados:
-        linha['date_recycle'] = linha['date_recycle'].strftime('%d/%m/%Y')  # Formata a data
-
     # Separar os dados nas categorias: Hoje, Ontem, Ainda esta semana, Período anterior
     hoje = []
     ontem = []
@@ -73,17 +69,22 @@ def home():
     fim_semana = inicio_semana + timedelta(days=6)  # Fim da semana
 
     for linha in dados:
-        # Convertendo a data para datetime
-        data_recycle = datetime.strptime(linha['date_recycle'], '%d/%m/%Y')
+        # Verifica se a data não é None antes de tentar formatá-la
+        if linha['date_recycle']:
+            data_recycle = linha['date_recycle']  # A data original
+            linha['date_recycle'] = data_recycle.strftime('%d/%m/%Y')  # Formata a data
+        else:
+            linha['date_recycle'] = 'Data não disponível'  # Ou qualquer outro valor padrão
+            data_recycle = None  # Define para None quando não houver data
 
         # Verificando se a data é hoje
-        if data_recycle.date() == hoje_data.date():
+        if data_recycle and data_recycle.date() == hoje_data.date():
             hoje.append(linha)
         # Verificando se a data é ontem
-        elif data_recycle.date() == ontem_data.date():
+        elif data_recycle and data_recycle.date() == ontem_data.date():
             ontem.append(linha)
         # Verificando se a data está dentro da mesma semana
-        elif inicio_semana.date() <= data_recycle.date() <= fim_semana.date():
+        elif data_recycle and inicio_semana.date() <= data_recycle.date() <= fim_semana.date():
             ainda_esta_semana.append(linha)
         else:
             periodo_anterior.append(linha)
@@ -93,6 +94,7 @@ def home():
 
     # Passar os dados para o template
     return render_template('home.html', hoje=hoje, ontem=ontem, ainda_esta_semana=ainda_esta_semana, periodo_anterior=periodo_anterior)
+
 
 import os
 
@@ -134,8 +136,12 @@ def Points():
 @routes.route('/Graphics')
 @login_required
 def Graphics():
-
     return render_template('Graphics.html')
+
+@routes.route('/Contents')
+@login_required
+def Contents():
+    return render_template('Content.html')
 
 @routes.route('/Classification')
 @login_required
@@ -196,43 +202,82 @@ ORDER BY all_users.points DESC;
 
 
 @routes.route('/register', methods=['POST'])
-@login_required
 def register():
     print('Rota /register foi chamada!')
     print(request.form)
 
+    # Coletando os dados do formulário
     name = request.form['name']
     birth_date = request.form['birth_date']
+
+    # Tentando converter a data para o formato correto
     try:
-        birth_date = datetime.strptime(birth_date, "%d/%m/%Y").date()  # Converte para o formato correto
+        birth_date = datetime.strptime(birth_date, "%d/%m/%Y").date()
     except ValueError:
-        raise ValueError("A data de nascimento está em um formato incorreto. Use o formato DD/MM/YYYY.")
+        return jsonify({'message': 'A data de nascimento está em um formato incorreto. Use o formato DD/MM/YYYY.'}), 400
+
     address = request.form['address']
     email = request.form['email']
-    phone = request.form['phone']
+    phone = request.form['ddi'] + request.form['phone']
     password = request.form['password']
+    registration_date = datetime.today()
 
-    # Aqui cria o objeto User
+    # Definindo o status e a data de último login, caso necessário
+    status = 'ativo'  # Isso pode variar dependendo da lógica do seu sistema
+    last_login_date = None  # Você pode definir isso conforme necessário
+
+    # Criando o objeto User
     user = User(
-        id=None,  # Pode ser None, se o MySQL gerar automaticamente
+        id=None,
         name=name,
         email=email,
-        password=password,
+        password=password,  # A senha será criptografada dentro da função cadastro
         phone=phone,
         address=address,
-        birth_date = birth_date
+        birth_date=birth_date,
+        points=0,  # Pode ser um valor padrão se não estiver sendo enviado
+        registration_date=registration_date,
+        status=status,
+        last_login_date=last_login_date
     )
 
-    result = user.cadastro()
-    return jsonify({'message': result})
+    # Chama a função cadastro que vai criptografar a senha e salvar no banco
+    try:
+        result = user.cadastro()  # Chama a função de cadastro
+        return jsonify(result), 201  # Resposta de sucesso
+    except Exception as e:
+        return jsonify({'message': f'Ocorreu um erro: {str(e)}'}), 500
 
+@routes.route('/check-email', methods=['GET'])
+def check_email():
+    email = request.args.get('email')
     
+    if not email:
+        return jsonify({'message': 'O e-mail é obrigatório.'}), 400
+    
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT COUNT(*) AS count FROM Users WHERE email = %s", (email,))
+        result = cursor.fetchone()
+
+        
+        cursor.close()
+        conn.close()
+
+        if result['count'] > 0:
+            return jsonify({'emailExists': True}), 200
+        else:
+            return jsonify({'emailExists': False}), 200
+
+    except Exception as e:
+        print(f"Erro ao verificar o e-mail: {e}")
+        return jsonify({'message': 'Erro ao verificar o e-mail. Tente novamente mais tarde.'}), 500
 
 @routes.route('/login', methods=['POST'])
-
 def login():
     try:
-        email = request.form['email']   # Pega do form, igual o cadastro
+        email = request.form['email']
         password = request.form['password']
 
         if not email or not password:
@@ -240,7 +285,8 @@ def login():
 
         result = User.login(email, password)
 
-        if result.get('message') == 'Login bem-sucedido':
+        # Verifica o tipo de resposta e retorna a resposta correspondente
+        if 'message' in result and result['message'] == 'Login bem-sucedido':
             return jsonify(result), 200
         else:
             return jsonify(result), 401
@@ -283,23 +329,46 @@ def cadastrar_reciclagem():
     if not user_info:
         return {"message": "Usuário não autenticado"}, 401
 
-    user_id = user_info['id']  # Aqui você pega o id do usuário
+    user_id = user_info['id']  # Corrigido aqui
     date_recycle = datetime.now()
     category_id = data.get('category')
     point_id = data.get('collection_point')
-    weight_item = data.get('peso')
+    if point_id is None:
+        point_id = 0
+        
+    try:
+        weight_item = float(data.get('peso'))  # Corrigido aqui
+    except (TypeError, ValueError):
+        return jsonify({"message": "Peso inválido."}), 400
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    
+
     try:
+        # Buscar score por quilo da categoria
+        cursor.execute("SELECT score_by_kilo FROM category_item WHERE id = %s", (category_id,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            return jsonify({"message": "Categoria não encontrada"}), 404
+
+        score_by_kilo = resultado[0]
+        pontos_obtidos = (weight_item / 1000) * score_by_kilo  # Corrigido aqui
+
+        # Atualizar a pontuação do usuário
+        cursor.execute("SELECT points FROM users WHERE id = %s", (user_id,))
+        score_atual = cursor.fetchone()[0]
+        novo_score = score_atual + pontos_obtidos
+
+        cursor.execute("UPDATE users SET points = %s WHERE id = %s", (novo_score, user_id))
+
+        # Inserir a reciclagem
         cursor.execute("""
             INSERT INTO recycle (user_id, category_id, weight_item, point_id, date_recycle)
             VALUES (%s, %s, %s, %s, %s)
         """, (user_id, category_id, weight_item, point_id, date_recycle))
 
         conn.commit()
-        return jsonify({"message": "Reciclagem cadastrada com sucesso!"})
+        return jsonify({"message": "Reciclagem cadastrada com sucesso!", "pontos_obtidos": pontos_obtidos})
     except Exception as e:
         conn.rollback()
         print("Erro ao cadastrar reciclagem:", e)
@@ -785,10 +854,14 @@ def get_user_id():
 
 @routes.route("/notifications")
 def notifications():
-    user_id = session.get("user_id")
+    user_info = session.get('user_info')  # Recupera as informações do usuário logado
+    user_id = user_info['id']  # Pega o ID do usuário logado
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM user_notification where is_read = 0 ORDER BY date_notification DESC")
+    cursor.execute(
+    "SELECT * FROM user_notification WHERE user_id = %s AND is_read = 0 ORDER BY date_notification DESC",
+    (user_id,)
+)
     notifications = cursor.fetchall()
     cursor.close()
     conn.close()

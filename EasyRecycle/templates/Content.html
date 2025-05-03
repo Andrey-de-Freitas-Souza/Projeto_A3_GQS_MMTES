@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='Style_Home.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='Style_notification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style_Content.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='Images/Icon.png') }}" type="png"> 
     <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
@@ -53,10 +53,12 @@
             <svg class ="help"width="40" height="40" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10.8333 0C4.85333 0 0 4.85333 0 10.8333C0 16.8133 4.85333 21.6667 10.8333 21.6667C16.8133 21.6667 21.6667 16.8133 21.6667 10.8333C21.6667 4.85333 16.8133 0 10.8333 0ZM11.9167 18.4167H9.75V16.25H11.9167V18.4167ZM14.1592 10.0208L13.1842 11.0175C12.4042 11.8083 11.9167 12.4583 11.9167 14.0833H9.75V13.5417C9.75 12.35 10.2375 11.2667 11.0175 10.4758L12.3608 9.11083C12.7617 8.72083 13 8.17917 13 7.58333C13 6.39167 12.025 5.41667 10.8333 5.41667C9.64167 5.41667 8.66667 6.39167 8.66667 7.58333H6.5C6.5 5.18917 8.43917 3.25 10.8333 3.25C13.2275 3.25 15.1667 5.18917 15.1667 7.58333C15.1667 8.53667 14.7767 9.40333 14.1592 10.0208Z" fill="#2E2D36"/>
             </svg>
+            <a href="/notifications">
             <svg class="Notification" width="40" height="40" viewBox="0 0 21 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18.7867 17.2857H20.7867V19.1905H0.786743V17.2857H2.78674V10.619C2.78674 8.59835 3.6296 6.66042 5.12989 5.23157C6.63018 3.80272 8.66501 3 10.7867 3C12.9085 3 14.9433 3.80272 16.4436 5.23157C17.9439 6.66042 18.7867 8.59835 18.7867 10.619V17.2857ZM7.78674 21.0952H13.7867V23H7.78674V21.0952Z" fill="#2E2D36"/>
                 <circle cx="17" cy="4" r="4" fill="#EE4B4B"/>
               </svg>
+            </a>
               <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profiles/' ~ user.id ~ '.jpg') }}" alt="Perfil">
      
         </div>
@@ -75,38 +77,80 @@
             </nav>
         </aside>
     </header>
+    <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reciclagem: Por que é importante?</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
     <main>
-        <h1>Suas Notificações</h1>
-        {% if not notification %}
-        <p>Nenhuma nova notificação no momento.</p>
-        {% endif %}
-        {% for notification in notifications %}
-        <div class="notification {{ notification.type_notification }}" data-id="{{ notification.id }}" data-read="{{ notification.is_read }}">
-          
-          {% if notification.type_notification == 'Convite de amizade' %}
-            <div class="profile-pic">
-              <img src="{{ url_for('static', filename='Images/Profiles/' ~ notification.user_id ~ '.jpg') }}"
-                   alt="Foto de perfil" width="40" height="40" style="border-radius: 50%;">
-            </div>
-          {% endif %}
-      
-          <div class="notification-content">
-            <p class="message">{{ notification.message }}</p>
-          </div>
-      
-          <div class="notification-actions">
-            <div class="timestamp">
-              {{ notification.date_notification.strftime('%d/%m/%Y %H:%M') }}
-            </div>
-            <button class="mark-as-read">Marcar como lida</button>
-          </div>
-        </div>
-      {% endfor %}
+        <h1>Reciclagem: Por que é importante?</h1>
+        <p>A reciclagem é um dos pilares fundamentais para a preservação do meio ambiente. Ao reciclar, conseguimos reduzir a quantidade de lixo que vai para os aterros sanitários e incineradores, além de diminuir a extração de recursos naturais, o que é essencial para garantir que as futuras gerações possam usufruir dos mesmos recursos que temos hoje.</p>
+        <hr>
 
+        <h2>Benefícios da Reciclagem</h2>
+        <ul>
+            <li><strong>Redução do Lixo:</strong> Menos resíduos são enviados para aterros e incineradores, ajudando a manter o ambiente mais limpo.</li>
+            <li><strong>Conservação de Recursos Naturais:</strong> Ao reciclar, diminuímos a extração de recursos naturais e preservamos a biodiversidade.</li>
+            <li><strong>Economia de Energia:</strong> A reciclagem consome muito menos energia do que a produção de novos produtos a partir de matérias-primas.</li>
+            <li><strong>Prevenção da Poluição:</strong> Reciclar evita a emissão de poluentes que afetam o ar, a água e o solo.</li>
+        </ul>
+
+        <hr>
+
+        <h2>Como Reciclar Corretamente?</h2>
+        <p>A primeira etapa para uma reciclagem eficaz é entender os diferentes tipos de materiais recicláveis e como separá-los corretamente. Aqui estão alguns materiais recicláveis comuns:</p>
+        <ul>
+            <li><strong>Plásticos:</strong> Garrafas PET, embalagens de plástico, sacolas plásticas (separar por tipo).</li>
+            <li><strong>Papéis:</strong> Jornais, revistas, caixas de papelão, cadernos (sem resíduos de alimentos ou contaminantes).</li>
+            <li><strong>Vidros:</strong> Garrafas, potes, frascos (sem resíduos orgânicos).</li>
+            <li><strong>Metais:</strong> Latas de alumínio, latas de aço, tampas de garrafa (devem estar limpos).</li>
+        </ul>
+
+        <p><strong>Importante:</strong> Nunca misture materiais recicláveis com resíduos orgânicos ou outros tipos de lixo, pois isso dificulta o processo de reciclagem.</p>
+
+        <hr>
+
+        <h2>Vídeos para Entender a Reciclagem</h2>
+        <p>Assista aos vídeos abaixo para aprender mais sobre como reciclar e o impacto que isso pode ter no planeta:</p>
         
+        <div class="video-gallery">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/Jr36f2wK4pk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7rF9NWaTALg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/YUI99HKmcGE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        </div>
+
+        <hr>
+
+
+        <h2>Impacto da Reciclagem no Meio Ambiente</h2>
+        <p>Além de reduzir a quantidade de resíduos nos aterros, a reciclagem tem um impacto direto na preservação do meio ambiente. Por exemplo:</p>
+        <ul>
+            <li><strong>Redução da emissão de gases de efeito estufa:</strong> A reciclagem de materiais como o alumínio exige menos energia do que a produção a partir de minérios, resultando em menos emissão de CO2.</li>
+            <li><strong>Menor consumo de recursos naturais:</strong> A reciclagem de papel e madeira contribui para a preservação das florestas e ecossistemas.</li>
+            <li><strong>Preservação da fauna e flora:</strong> Ao reduzir a extração de recursos naturais, evitamos a destruição de habitats de diversas espécies.</li>
+        </ul>
+
+        <hr>
+
+        <h2>Dicas para Reciclar no Dia a Dia</h2>
+        <ul>
+            <li>Tenha sempre um espaço em casa para separar o lixo reciclável do orgânico.</li>
+            <li>Verifique a embalagem do produto para saber se é reciclável e como deve ser descartada.</li>
+            <li>Reduza o consumo de plástico e opte por produtos com embalagens recicláveis ou reutilizáveis.</li>
+            <li>Participe de programas de coleta seletiva na sua cidade.</li>
+        </ul>
     </main>
+</body>
+</html>
+
+    
     <script src="{{ url_for('static', filename='Scripts/Script_Home.js') }}"></script>
-    <script src="{{ url_for('static', filename='Scripts/Script_Notification.js') }}"></script>
 </body>
 </html>

@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", function () {
+  const profileImg = document.getElementById("Profile");
+  
+  profileImg.addEventListener("error", function () {
+      this.src = "{{ url_for('static', filename='Images/Profile.jpg') }}";
+  });
+});
+
 const sidebar = document.getElementById('sidebar');
 const hamburgerIcon = document.getElementById('hamburger-icon');
 
@@ -231,3 +239,43 @@ fetch('/get-collection-points')
 // Chama a função ao carregar a página
 window.onload = fetchUserId;
 
+document.getElementById('formCadastro').addEventListener('submit', function(event) {
+  event.preventDefault(); // Impede o reload da página
+  
+  const category = document.getElementById('categorySelect').value;
+  const collection_point = document.getElementById('collection_point').value;
+  if (collection_point==="id"){
+    collection_point=4
+  }
+  const peso = document.getElementById('peso').value;
+  const errorMessage = document.getElementById('error-message'); // O <p> onde será exibida a mensagem de erro
+  console.log(4)
+  console.log(category)
+  console.log(peso)
+  // Limpa a mensagem de erro ao tentar submeter
+  errorMessage.textContent = '';
+
+  // Verifica se os campos obrigatórios estão preenchidos
+  if (!category || category === "id" || !peso || peso === "") {
+    // Se algum campo obrigatório estiver vazio, exibe a mensagem de erro
+    errorMessage.textContent = 'Por favor, preencha todos os campos obrigatórios (matéria, ponto de coleta e peso).';
+    errorMessage.style.color = 'red'; // Altera a cor da mensagem para vermelho
+    return; // Impede o envio do formulário
+  }
+
+  // Caso contrário, envia os dados
+  fetch('/cadastrar-reciclagem', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ category, collection_point, peso })
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert(data.message); // Mensagem de sucesso ou erro
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+  });
+});
