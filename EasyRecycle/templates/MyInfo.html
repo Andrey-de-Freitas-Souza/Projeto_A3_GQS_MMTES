@@ -31,7 +31,7 @@
                 <p class="topicos">Minha Jornada</p>
             <ul>
                 <li><a href="/home">Minhas reciclagens</a></li>
-                <li><a href="/home">Conteúdos informativos</a></li>
+                <li><a href="/Contents">Conteúdos informativos</a></li>
             </ul>
             <hr>
             <p class="topicos">Vizinhança</p>
@@ -50,15 +50,19 @@
 
         <!-- Grupo direito: ícones -->
         <div class="header-icons">    
+            <a href="/help">
             <svg class ="help"width="40" height="40" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10.8333 0C4.85333 0 0 4.85333 0 10.8333C0 16.8133 4.85333 21.6667 10.8333 21.6667C16.8133 21.6667 21.6667 16.8133 21.6667 10.8333C21.6667 4.85333 16.8133 0 10.8333 0ZM11.9167 18.4167H9.75V16.25H11.9167V18.4167ZM14.1592 10.0208L13.1842 11.0175C12.4042 11.8083 11.9167 12.4583 11.9167 14.0833H9.75V13.5417C9.75 12.35 10.2375 11.2667 11.0175 10.4758L12.3608 9.11083C12.7617 8.72083 13 8.17917 13 7.58333C13 6.39167 12.025 5.41667 10.8333 5.41667C9.64167 5.41667 8.66667 6.39167 8.66667 7.58333H6.5C6.5 5.18917 8.43917 3.25 10.8333 3.25C13.2275 3.25 15.1667 5.18917 15.1667 7.58333C15.1667 8.53667 14.7767 9.40333 14.1592 10.0208Z" fill="#2E2D36"/>
             </svg>
+        </a>
+            <a href="/notifications">
             <svg class="Notification" width="40" height="40" viewBox="0 0 21 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18.7867 17.2857H20.7867V19.1905H0.786743V17.2857H2.78674V10.619C2.78674 8.59835 3.6296 6.66042 5.12989 5.23157C6.63018 3.80272 8.66501 3 10.7867 3C12.9085 3 14.9433 3.80272 16.4436 5.23157C17.9439 6.66042 18.7867 8.59835 18.7867 10.619V17.2857ZM7.78674 21.0952H13.7867V23H7.78674V21.0952Z" fill="#2E2D36"/>
                 <circle cx="17" cy="4" r="4" fill="#EE4B4B"/>
               </svg>
+            </a>
               <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profiles/' ~ user.id ~ '.jpg') }}" alt="Perfil">
-            
+     
         </div>
 
         <aside class="sidebar_direito" id="sidebar_direito">

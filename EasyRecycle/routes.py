@@ -143,6 +143,11 @@ def Graphics():
 def Contents():
     return render_template('Content.html')
 
+@routes.route('/help')
+@login_required
+def help():
+    return render_template('help.html')
+
 @routes.route('/Classification')
 @login_required
 def Classification():

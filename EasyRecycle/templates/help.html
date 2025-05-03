@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='Style_Home.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='Style_Add_Friend.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='Style_Help.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='Images/Icon.png') }}" type="png"> 
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
     <title>Easy Recycle</title>
    
 </head>
@@ -78,107 +80,46 @@
         </aside>
     </header>
     <main>
-        <div id="btnAdicionar" class="Adicionar">
-            <p>Adicionar amigo</p>
-            <p class="plus">+</p>
-        </div>
-
-        <div id="modalOverlay" class="overlay" style="display: none;">
-            <div class="modal">
-                <button id="fecharModal" style="
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: none;
-      border: none;
-      font-size: 60px;  /* Aumentando o tamanho */
-      font-weight: bold;
-      cursor: pointer;
-      color: #333;
-      z-index: 1000;
-      line-height: 0;
-    ">
-      ⌵
-    </button>
-    
-                <h2>Adicionar um amigo</h2>
-                <form id="formCadastro">
-                    <label for="email">Email do usuário a quem você deseja enviar um convite de amizade:</label>
-                    <input id="email" type="email" placeholder="Digite o e-mail do usuário" name="email" required>
-                    <button type="submit" onclick="enviarConvite(event)">Solicitar</button>
-                </form>
-            </div>
-        </div>  
-{% if solicitacao %}
-    <div class="toggle-solicitacoes">
-        <h2 onclick="toggleSolicitacoes()">
-            Solicitações pendentes
-            <span id="seta">&#9650;</span> <!-- seta para cima -->
-        </h2>
+        <div  class="help-container">
+        <section class="help-intro">
+          <h1>Sobre o Easy Recycle</h1>
+          <p>
+            O <strong>Easy Recycle</strong> é um aplicativo criado para facilitar e incentivar a reciclagem. 
+            Ele ajuda os usuários a separarem corretamente seus resíduos, acumularem pontos, se conectarem com amigos e acompanharem seu progresso através de gráficos e rankings.
+          </p>
+        </section>
+      
+        <section class="help-section">
+          <h2>Minhas Reciclagens</h2>
+          <p>Nessa página, você pode <strong>cadastrar materiais recicláveis</strong> que separou e acompanhar o histórico de suas reciclagens. É uma forma de monitorar seu impacto positivo no meio ambiente.</p>
+        </section>
+      
+        <section class="help-section">
+          <h2>Adicionar Amigo</h2>
+          <p>Conecte-se com outras pessoas usando o Easy Recycle! Envie convites de amizade e acompanhe o desempenho dos seus amigos na reciclagem.</p>
+        </section>
+      
+        <section class="help-section">
+          <h2>Classificação</h2>
+          <p>Aqui você encontra a <strong>pontuação dos seus amigos</strong> com base nas reciclagens realizadas. Veja quem está no pódio e motive-se para subir no ranking!</p>
+        </section>
+      
+        <section class="help-section">
+          <h2>Conteúdos Informativos</h2>
+          <p>Essa página contém <strong>textos e vídeos educativos</strong> sobre reciclagem. Aprenda como separar corretamente os resíduos, descubra o que pode ou não ser reciclado e muito mais.</p>
+        </section>
+      
+        <section class="help-section">
+          <h2>Gráficos</h2>
+          <p>Visualize seu progresso por meio de <strong>dashboards interativos</strong>. Acompanhe sua evolução ao longo do tempo, os tipos de materiais mais reciclados e compare seu desempenho.</p>
+        </section>
+      
+        <section class="help-section">
+          <h2>Pontos de Reciclagem</h2>
+          <p>Encontre os <strong>pontos de coleta</strong> de recicláveis mais próximos de você. Essa página usa seu CEP para localizar locais disponíveis na sua região.</p>
+        </section>
     </div>
-    
-    <div id="lista-solicitacoes">
-        {% for linha in solicitacao %}
-        <div class="data-container-friend" data-id="{{ linha.id }}">
-            <div class="perfil-info">
-                <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profiles/' ~ linha.id ~ '.jpg') }}" alt="Perfil">
-                <p class="nome">{{ linha.name }}</p>
-            </div>
-    
-            <div class="acoes-container">
-                <p class="data-solicitacao">{{ linha.date_friend.strftime('%d/%m/%Y') }}</p>
-                <div class="botoes">
-                    <div class="botoes-amizade" data-id="{{ linha.id }}">
-                        <button class="btn-aceitar">Aceitar</button>
-                        <button class="btn-recusar">Recusar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-<hr>
-{% else %}
-<div class="toggle-solicitacoes">
-    <h2>Solicitações pendentes</h2>
-    <p>Não há solicitações pendentes para aprovação no momento.</p>
-</div>
-
-{% endif %}
-
-{% if amigos %}
-<div class="toggle-solicitacoes">
-    <h2 onclick="toggleAmigos()">
-        Amigos
-        <span id="seta2">&#9650;</span> <!-- seta para cima -->
-    </h2>
-</div>
-
-
-<div id="lista-amigos" class="container-amigos">
-    {% for amigo in amigos %}
-    <div class="data-container-friend" data-id="{{ amigo.id }}">
-        <div class="perfil-info">
-            <img id="Profile" class="Profile" src="{{ url_for('static', filename='Images/Profiles/' ~ amigo.id ~ '.jpg') }}" alt="Perfil">
-            <p class="nome">{{ amigo.name }}</p>
-        </div>
-        <div class="acoes-container">
-            <div class="botoes">
-                <div class="botoes-amizade" data-id="{{ amigo.id }}">
-                    <button class="btn-remover">Remover</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
-
-
-    </main>
-
-    <script src="{{ url_for('static', filename='Scripts/Script_add_friend.js') }}"></script>
-    
+      </main>    
+    <script src="{{ url_for('static', filename='Scripts/Script_Home.js') }}"></script>
 </body>
 </html>
