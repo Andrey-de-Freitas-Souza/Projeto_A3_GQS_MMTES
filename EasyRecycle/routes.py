@@ -224,7 +224,7 @@ def register():
     address = request.form['address']
     email = request.form['email']
     phone = request.form['ddi'] + request.form['phone']
-    password = request.form['password']
+    password = request.form['senha']
     registration_date = datetime.today()
 
     # Definindo o status e a data de último login, caso necessário

@@ -172,28 +172,7 @@ fetch('/get-collection-points')
     }, 500);
   });
 
-  document.getElementById('formCadastro').addEventListener('submit', function(event) {
-    event.preventDefault(); // Impede o reload da página
-  
-    const category = document.getElementById('categorySelect').value;
-    const collection_point = document.getElementById('collection_point').value;
-    const peso = document.getElementById('peso').value;
-  
-    fetch('/cadastrar-reciclagem', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ category, collection_point, peso })
-    })
-    .then(response => response.json())
-    .then(data => {
-      alert(data.message); // Mensagem de sucesso ou erro
-    })
-    .catch(error => {
-      console.error('Erro:', error);
-    });
-  });
+ 
 
   document.querySelectorAll('.category-header').forEach(header => {
     header.style.backgroundColor = header.getAttribute('data-color');
@@ -217,65 +196,44 @@ fetch('/get-collection-points')
   });
 
   
-  function fetchUserId() {
-    // Faz uma requisição GET para obter o id do usuário
-    fetch('/get_user_id')
-        .then(response => response.json())
-        .then(data => {
-            if (data.user_id) {
-                console.log("ID do usuário:", data.user_id);
-                // Aqui você pode manipular a página com o ID, se necessário
-                // Exemplo: Exibir o ID em um elemento HTML
-                document.getElementById('user-id').textContent = data.user_id;
-            } else {
-                console.log("Erro ao obter o ID do usuário");
-            }
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-        });
-}
 
-// Chama a função ao carregar a página
-window.onload = fetchUserId;
 
-document.getElementById('formCadastro').addEventListener('submit', function(event) {
-  event.preventDefault(); // Impede o reload da página
+  document.getElementById('formCadastro').addEventListener('submit', function(event) {
+    event.preventDefault(); // Impede o reload da página
   
-  const category = document.getElementById('categorySelect').value;
-  const collection_point = document.getElementById('collection_point').value;
-  if (collection_point==="id"){
-    collection_point=4
-  }
-  const peso = document.getElementById('peso').value;
-  const errorMessage = document.getElementById('error-message'); // O <p> onde será exibida a mensagem de erro
-  console.log(4)
-  console.log(category)
-  console.log(peso)
-  // Limpa a mensagem de erro ao tentar submeter
-  errorMessage.textContent = '';
-
-  // Verifica se os campos obrigatórios estão preenchidos
-  if (!category || category === "id" || !peso || peso === "") {
-    // Se algum campo obrigatório estiver vazio, exibe a mensagem de erro
-    errorMessage.textContent = 'Por favor, preencha todos os campos obrigatórios (matéria, ponto de coleta e peso).';
-    errorMessage.style.color = 'red'; // Altera a cor da mensagem para vermelho
-    return; // Impede o envio do formulário
-  }
-
-  // Caso contrário, envia os dados
-  fetch('/cadastrar-reciclagem', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ category, collection_point, peso })
-  })
-  .then(response => response.json())
-  .then(data => {
-    alert(data.message); // Mensagem de sucesso ou erro
-  })
-  .catch(error => {
-    console.error('Erro:', error);
+    const category = document.getElementById('categorySelect').value;
+    let collection_point = document.getElementById('collection_point').value;
+    const peso = document.getElementById('peso').value;
+    const errorMessage = document.getElementById('error-message'); // O <p> onde será exibida a mensagem de erro
+    console.log(collection_point)
+    // Limpa a mensagem de erro ao tentar submeter
+    errorMessage.textContent = '';
+  
+    // Verifica se category e peso foram preenchidos corretamente
+    if (!category || category === "id" || !peso || isNaN(peso) || Number(peso) <= 0) {
+      errorMessage.textContent = 'Por favor, preencha os campos obrigatórios corretamente (matéria e peso).';
+      errorMessage.style.color = 'red';
+      return;
+    }
+  
+    // Se collection_point não for preenchido corretamente, define como 0
+    if (!collection_point || collection_point === "id") {
+      collection_point = 1;
+    }
+    console.log(collection_point)
+    // Envia os dados
+    fetch('/cadastrar-reciclagem', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ category, collection_point, peso })
+    })
+    .then(response => response.json())
+    .then(data => {
+      alert(data.message); // Mensagem de sucesso ou erro
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+    });
   });
-});
