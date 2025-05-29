@@ -113,7 +113,7 @@ def MyInfo():
         WHERE id = %s
     """, (user_id,))
 
-    dados_usuario = cursor.fetchone()
+    dados_usuario = cursor.fetchall()
     conn.close()
 
     # Verifica se existe imagem personalizada
