@@ -37,7 +37,7 @@
 
 4. Navegue até o diretório do projeto:
 ```bash
-   cd EasyRecicle
+   cd cd EasyRecycle
 ```
 
 5. Instale as dependências:
