@@ -113,7 +113,7 @@ def MyInfo():
         WHERE id = %s
     """, (user_id,))
 
-    dados_usuario = cursor.fetchall()
+    dados_usuario = cursor.fetchone()
     conn.close()
 
     # Verifica se existe imagem personalizada
@@ -699,9 +699,9 @@ def verificar_email():
 
     # Insere notificação para o destinatário
     cursor.execute("""
-        INSERT INTO user_notification (user_id, type_notification, message)
-        VALUES (%s, 'Convite de amizade', %s)
-    """, (id_destinatario, f"{nome_remetente} te enviou um convite de amizade."))
+        INSERT INTO user_notification (user_id, type_notification, message, photo_id)
+        VALUES (%s, 'Convite de amizade', %s,%s)
+    """, (id_destinatario, f"{nome_remetente} te enviou um convite de amizade.",id_remetente))
 
     conn.commit()
 

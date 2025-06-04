@@ -89,7 +89,7 @@
           
           {% if notification.type_notification == 'Convite de amizade' %}
             <div class="profile-pic">
-              <img src="{{ url_for('static', filename='Images/Profiles/' ~ notification.user_id ~ '.jpg') }}"
+              <img src="{{ url_for('static', filename='Images/Profiles/' ~ notification.photo_id ~ '.jpg') }}"
                    alt="Foto de perfil" width="40" height="40" style="border-radius: 50%;">
             </div>
           {% endif %}
